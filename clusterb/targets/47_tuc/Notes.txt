@@ -1,0 +1,39 @@
+Membership selection criteria
+
+- Distance from core 
+- v mag
+- metallicity
+- proper motion dispersion
+- surface gravity
+- radial velocity dispersion
+
+Targets selection criteria 
+Members
+- local density
+Sky
+Fiducials
+
+
+
+Questions:
+Where the get V_mag from? Sanjib? (using B_mag at the moment)
+
+
+Pending:
+Calculate field stars contamination
+position sky and fiducials fibres
+standard stars catalogues?
+final selection en RA DEC
+tidal radus
+
+
+TO DO:
+sky visual inspection dss
+standard stars (look for kens paper or other) any stars well studied within mags 12 13 even field stars (ideally radial velocity)
+Look for a list of radial velocities chubak 2012
+
+
+
+
+
+

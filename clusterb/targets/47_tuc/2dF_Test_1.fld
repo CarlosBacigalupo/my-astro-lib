@@ -1,0 +1,440 @@
+* "@(#) $Id: ACMM:aaoConfigure/fields/2dF/2dF_Test_1.fld,v 11.59 01-Nov-2012 16:23:10+11 ks $"
+*
+LABEL Final Analysis Sources in ELAIS-S1 
+UTDATE 2002 07 07
+CENTRE 00 34 37.20  -43 28 12.00
+EQUINOX J2000.0
+* end of required header info
+*
+* Fiducial Stars
+*
+F02    00 30 42.62 -43 47 02.11    F  9   13.65  0  fiducial star
+F03    00 31 39.02 -42 48 01.75    F  9   13.74  0  fiducial star
+F04    00 32 16.06 -43 51 05.29    F  9   13.64  0  fiducial star 
+F05    00 32 20.19 -43 01 41.91    F  9   13.40  0  fiducial star
+F06    00 32 20.42 -43 52 52.30    F  9   13.88  0  fiducial star
+F08    00 32 46.00 -43 54 50.59    F  9   13.87  0  fiducial star
+F09    00 32 49.99 -43 19 19.02    F  9   13.60  0  fiducial star
+F10    00 33 16.90 -43 47 52.54    F  9   13.68  0  fiducial star
+F11    00 33 47.78 -43 53 48.36    F  9   13.76  0  fiducial star
+F12    00 34 35.74 -42 40 38.96    F  9   13.78  0  fiducial star
+F13    00 35 28.73 -44 15 17.11    F  9   13.57  0  fiducial star
+F14    00 35 55.00 -43 57 27.39    F  9   13.53  0  fiducial star
+F15    00 36 09.00 -44 05 06.02    F  9   13.57  0  fiducial star
+F16    00 36 09.35 -43 37 59.54    F  9   13.61  0  fiducial star
+F17    00 36 11.19 -42 56 38.00    F  9   13.72  0  fiducial star
+F18    00 36 19.47 -42 39 41.12    F  9   13.46  0  fiducial star
+F19    00 36 38.92 -43 03 02.05    F  9   13.77  0  fiducial star
+F20    00 36 59.29 -44 03 22.91    F  9   13.83  0  fiducial star
+F21    00 37 09.57 -42 54 41.40    F  9   13.64  0  fiducial star
+F22    00 37 19.70 -44 13 35.07    F  9   13.80  0  fiducial star
+F23    00 37 32.70 -43 58 20.27    F  9   13.45  0  fiducial star
+F24    00 37 40.00 -43 28 16.66    F  9   13.73  0  fiducial star
+F25    00 37 49.26 -43 17 17.53    F  9   13.49  0  fiducial star
+F26    00 38 07.62 -43 15 37.93    F  9   13.82  0  fiducial star
+F27    00 39 21.22 -43 12 30.62    F  9   13.74  0  fiducial star
+F28    00 39 28.00 -43 34 07.82    F  9   13.62  0  fiducial star
+F29    00 31 55.36 -42 38 57.22    F  9   13.72  0  fiducial star
+F30    00 34 10.84 -43 46 23.70    F  9   13.77  0  fiducial star
+F31    00 35 03.94 -44 20 44.43    F  9   13.92  0  fiducial star
+F32    00 36 59.31 -44 09 12.37    F  9   13.95  0  fiducial star
+F33    00 37 02.48 -42 56 57.87    F  9   13.91  0  fiducial star
+F34    00 37 46.87 -42 41 44.55    F  9   13.91  0  fiducial star
+*
+* End guide stars.
+*
+* Program Sources
+*
+ELAIS_S1_01  00  29  30.66  -43  11  41.24  P   9  21.32 0               11
+ELAIS_S1_02  00  30  39.74  -42  53  49.42  P   9  20.65 0               22
+ELAIS_S1_03  00  31  23.87  -43  09  40.77  P   9  19.71 0               27
+ELAIS_S1_04  00  31  29.60  -43  07  48.00  P   9  20.78 0               28
+ELAIS_S1_05  00  31  43.01  -42  56  40.32  P   9  20.10 0               31
+ELAIS_S1_06  00  31  51.68  -43  10  44.61  P   9  20.24 0               35
+ELAIS_S1_07  00  29  30.77  -43  27  24.31  P   9  18.06 0               53
+ELAIS_S1_08  00  30  01.55  -43  22  01.24  P   9  18.53 0               63
+ELAIS_S1_09  00  30  40.12  -43  31  02.64  P   9  18.94 0               71
+ELAIS_S1_10  00  30  56.60  -43  58  08.48  P   9  18.47 0               74
+ELAIS_S1_11  00  31  31.89  -43  50  07.27  P   9  19.38 0               85
+ELAIS_S1_12  00  31  44.63  -43  48  34.22  P   9  21.01 0               91
+ELAIS_S1_13  00  32  34.53  -43  16  37.37  P   9  19.02 0               99
+ELAIS_S1_14  00  30  39.08  -44  09  09.69  P   9  18.46 0              109
+ELAIS_S1_15  00  31  33.59  -43  59  05.97  P   9  18.00 0              118
+ELAIS_S1_16  00  33  01.74  -44  07  51.12  P   9  19.17 0              140
+ELAIS_S1_17  00  33  20.02  -44  26  17.24  P   9  18.77 0              145
+ELAIS_S1_18  00  33  43.91  -44  16  57.24  P   9  19.23 0              153
+ELAIS_S1_19  00  32  08.07  -42  52  41.56  P   9  18.58 0              159
+ELAIS_S1_20  00  32  11.82  -42  41  03.79  P   9  18.33 0              160
+ELAIS_S1_21  00  32  51.96  -43  07  15.52  P   9  19.41 0              167
+ELAIS_S1_22  00  33  12.44  -42  39  16.23  P   9  18.88 0              172
+ELAIS_S1_23  00  33  47.95  -42  36  13.85  P   9  21.50 0              177
+ELAIS_S1_24  00  34  11.25  -42  58  39.99  P   9  21.04 0              179
+ELAIS_S1_25  00  34  15.20  -43  02  34.32  P   9  17.92 0              181
+ELAIS_S1_26  00  34  47.49  -42  52   6.94  P   9  17.81 0              186
+ELAIS_S1_27  00  34  58.94  -42  56  37.60  P   9  19.73 0              188
+ELAIS_S1_28  00  35  20.74  -42  57  24.09  P   9  20.89 0              191
+ELAIS_S1_29  00  35  41.65  -42  59  16.68  P   9  21.17 0              195
+ELAIS_S1_30  00  35  48.65  -42  55  14.00  P   9  21.25 0              197
+ELAIS_S1_31  00  32  21.51  -43  14  52.14  P   9  20.92 0              198
+ELAIS_S1_32  00  32  42.37  -43  15  46.03  P   9  20.88 0              200
+ELAIS_S1_33  00  34  07.45  -43  47  24.94  P   9  20.71 0              225
+ELAIS_S1_34  00  35  45.85  -43  18  35.78  P   9  21.46 0              267
+ELAIS_S1_35  00  36  03.65  -43  31  52.61  P   9  21.11 0              274
+ELAIS_S1_36  00  36  15.11  -43  13  28.68  P   9  19.44 0              277
+ELAIS_S1_37  00  36  20.23  -43  09  27.39  P   9  20.50 0              280
+ELAIS_S1_38  00  36  23.81  -43  27  02.58  P   9  21.00 0              282
+ELAIS_S1_39  00  36  56.01  -43  43  11.73  P   9  17.90 0              290
+ELAIS_S1_40  00  33  44.02  -44  08  03.02  P   9  19.14 0              294
+ELAIS_S1_41  00  36  13.98  -44  07  09.07  P   9  17.65 0              319
+ELAIS_S1_42  00  36  38.68  -44  12  09.36  P   9  20.87 0              324
+ELAIS_S1_43  00  37  00.24  -44  10  33.20  P   9  18.93 0              326
+ELAIS_S1_44  00  35  28.79  -42  38  33.76  P   9  21.19 0              328
+ELAIS_S1_45  00  37  03.57  -42  39  26.44  P   9  18.60 0              339
+ELAIS_S1_46  00  37  29.58  -42  46  06.40  P   9  18.63 0              347
+ELAIS_S1_47  00  36  48.80  -43  10  20.58  P   9  18.41 0              373
+ELAIS_S1_48  00  37  16.74  -43  41  51.36  P   9  17.93 0              376
+ELAIS_S1_49  00  37  53.36  -43  39  39.23  P   9  19.16 0              381
+ELAIS_S1_50  00  38  41.87  -43  19  05.58  P   9  19.48 0              390
+ELAIS_S1_51  00  38  48.59  -43  23  02.86  P   9  19.79 0              391
+ELAIS_S1_52  00  39  13.51  -43  07  56.49  P   9  20.88 0              398
+ELAIS_S1_53  00  39  40.02  -43  11  27.39  P   9  18.42 0              406
+ELAIS_S1_54  00  39  48.98  -43  14  19.10  P   9  17.88 0              408
+ELAIS_S1_55  00  39  22.41  -43  38  27.13  P   9  18.73 0              442
+ELAIS_98_01  00  31  14.40  -42  42  27.80  P   6  20.11 0               26
+ELAIS_98_02  00  35  23.80  -43  25  15.00  P   6  19.45 0              258
+ELAIS_RR_01  00  29  30.66  -43  11  41.24  P   3  21.32 0      ELAIS_Radio
+ELAIS_RR_02  00  29  32.26  -43  42  25.70  P   3  21.03 0      ELAIS_Radio
+ELAIS_RR_03  00  29  33.21  -43  43  13.77  P   3  21.36 0      ELAIS_Radio
+ELAIS_RR_04  00  29  34.05  -43  08  11.62  P   3  21.26 0      ELAIS_Radio
+ELAIS_RR_05  00  31  10.94  -44  07  35.95  P   3  20.01 0      ELAIS_Radio
+ELAIS_RR_06  00  31  21.93  -43  04  48.93  P   3  20.07 0      ELAIS_Radio
+ELAIS_RR_07  00  31  25.33  -43  21  15.97  P   3  21.21 0      ELAIS_Radio
+ELAIS_RR_08  00  31  55.55  -43  57  08.52  P   3  21.49 0      ELAIS_Radio
+ELAIS_RR_09  00  32  05.15  -43  16  20.82  P   3  17.07 0      ELAIS_Radio
+ELAIS_RR_10  00  32  12.45  -42  41  34.10  P   3  19.75 0      ELAIS_Radio
+ELAIS_RR_11  00  32  15.76  -43  49  51.75  P   3  21.28 0      ELAIS_Radio
+ELAIS_RR_12  00  32  33.26  -42  41  33.59  P   3  19.80 0      ELAIS_Radio
+ELAIS_RR_13  00  32  34.02  -44  17  47.53  P   3  19.32 0      ELAIS_Radio
+ELAIS_RR_14  00  32  39.39  -43  03  11.02  P   3  21.33 0      ELAIS_Radio
+ELAIS_RR_15  00  32  44.55  -43  24  46.78  P   3  20.15 0      ELAIS_Radio
+ELAIS_RR_16  00  33  21.01  -42  58  16.23  P   3  21.21 0      ELAIS_Radio
+ELAIS_RR_17  00  33  46.66  -43  13  57.56  P   3  19.18 0      ELAIS_Radio
+ELAIS_RR_19  00  33  57.32  -43  36  01.68  P   3  21.09 0      ELAIS_Radio
+ELAIS_RR_20  00  34  08.11  -43  22  59.97  P   3  21.45 0      ELAIS_Radio
+ELAIS_RR_21  00  34  25.27  -43  33  08.62  P   3  20.94 0      ELAIS_Radio
+ELAIS_RR_22  00  34  26.85  -43  02  17.36  P   3  20.08 0      ELAIS_Radio
+ELAIS_RR_23  00  34  32.84  -42  45  55.04  P   3  17.29 0      ELAIS_Radio
+ELAIS_RR_24  00  34  33.35  -43  42  11.51  P   3  21.32 0      ELAIS_Radio
+ELAIS_RR_25  00  34  44.09  -43  50  41.24  P   3  19.99 0      ELAIS_Radio
+ELAIS_RR_26  00  34  47.93  -42  49  33.30  P   3  21.36 0      ELAIS_Radio
+ELAIS_RR_27  00  34  58.48  -43  55  18.61  P   3  21.50 0      ELAIS_Radio
+ELAIS_RR_28  00  35  08.18  -43  41  44.01  P   3  21.28 0      ELAIS_Radio
+ELAIS_RR_29  00  35  29.84  -43  33  30.55  P   3  21.33 0      ELAIS_Radio
+ELAIS_RR_30  00  35  29.68  -44  20  56.09  P   3  20.05 0      ELAIS_Radio
+ELAIS_RR_31  00  35  31.09  -42  51  27.67  P   3  21.18 0      ELAIS_Radio
+ELAIS_RR_32  00  35  35.83  -43  02  32.89  P   3  21.45 0      ELAIS_Radio
+ELAIS_RR_33  00  35  49.81  -43  23  37.22  P   3  20.82 0      ELAIS_Radio
+ELAIS_RR_34  00  36  05.46  -44  06  22.31  P   3  21.32 0      ELAIS_Radio
+ELAIS_RR_35  00  36  18.90  -43  21  18.45  P   3  20.27 0      ELAIS_Radio
+ELAIS_RR_36  00  36  25.98  -43  59  27.11  P   3  21.38 0      ELAIS_Radio
+ELAIS_RR_37  00  36  35.41  -43  01  48.19  P   3  21.47 0      ELAIS_Radio
+ELAIS_RR_38  00  36  35.91  -43  56  14.61  P   3  20.96 0      ELAIS_Radio
+ELAIS_RR_39  00  36  35.41  -43  01  48.19  P   3  21.47 0      ELAIS_Radio
+ELAIS_RR_40  00  36  38.53  -44  18  14.50  P   3  21.30 0      ELAIS_Radio
+ELAIS_RR_41  00  36  43.50  -43  44  08.24  P   3  20.93 0      ELAIS_Radio
+ELAIS_RR_42  00  36  49.83  -44  09  03.34  P   3  19.94 0      ELAIS_Radio
+ELAIS_RR_43  00  37  05.63  -43  52  01.64  P   3  19.65 0      ELAIS_Radio
+ELAIS_RR_44  00  38  20.21  -42  47  57.66  P   3  20.26 0      ELAIS_Radio
+ELAIS_RR_45  00  38  21.45  -43  16  10.07  P   3  19.73 0      ELAIS_Radio
+ELAIS_RR_46  00  38  41.53  -43  39  25.22  P   3  20.50 0      ELAIS_Radio
+ELAIS_RR_47  00  38  40.72  -43  27  17.94  P   3  20.53 0      ELAIS_Radio
+ELAIS_RR_48  00  39  25.80  -42  59  01.37  P   3  20.12 0      ELAIS_Radio
+ELAIS_Fl001  00  36  09.22  -43  57  59.00  P   2  18.43 0      ELAIS_Field
+ELAIS_Fl002  00  30  39.08  -44  09  09.69  P   2  18.46 0      ELAIS_Field
+ELAIS_Fl003  00  32  58.35  -44  10  12.49  P   2  17.33 0      ELAIS_Field
+ELAIS_Fl004  00  35  38.71  -43  54  32.40  P   2  18.58 0      ELAIS_Field
+ELAIS_Fl005  00  36  17.42  -42  45  58.19  P   2  19.46 0      ELAIS_Field
+ELAIS_Fl006  00  33  05.19  -44  00  55.40  P   2  19.36 0      ELAIS_Field
+ELAIS_Fl007  00  29  18.83  -43  24  41.46  P   2  19.75 0      ELAIS_Field
+ELAIS_Fl008  00  33  51.31  -44  01  03.20  P   2  19.71 0      ELAIS_Field
+ELAIS_Fl009  00  33  19.54  -44  11  39.28  P   2  19.75 0      ELAIS_Field
+ELAIS_Fl010  00  29  35.44  -43  07  59.42  P   2  18.72 0      ELAIS_Field
+ELAIS_Fl011  00  34  49.54  -42  35  38.87  P   2  19.85 0      ELAIS_Field
+ELAIS_Fl012  00  34  30.85  -44  12  15.07  P   2  18.21 0      ELAIS_Field
+ELAIS_Fl013  00  37  27.10  -42  55  06.64  P   2  19.89 0      ELAIS_Field
+ELAIS_Fl014  00  36  08.44  -43  22  32.16  P   2  18.98 0      ELAIS_Field
+ELAIS_Fl015  00  39  34.03  -43  16  53.04  P   2  18.54 0      ELAIS_Field
+ELAIS_Fl016  00  37  20.81  -43  34   2.52  P   2  19.33 0      ELAIS_Field
+ELAIS_Fl017  00  33  07.05  -43  47  32.63  P   2  17.11 0      ELAIS_Field
+ELAIS_Fl018  00  34  17.06  -43  05  18.10  P   2  17.02 0      ELAIS_Field
+ELAIS_Fl019  00  32  02.62  -43  52  20.13  P   2  18.93 0      ELAIS_Field
+ELAIS_Fl020  00  35  15.96  -43  20  21.83  P   2  18.99 0      ELAIS_Field
+ELAIS_Fl021  00  38  34.75  -43  00  52.31  P   2  19.57 0      ELAIS_Field
+ELAIS_Fl022  00  35  27.14  -43  10  20.41  P   2  19.21 0      ELAIS_Field
+ELAIS_Fl023  00  37  57.21  -43  12  20.16  P   2  19.02 0      ELAIS_Field
+ELAIS_Fl024  00  34  28.74  -43  23  53.76  P   2  17.94 0      ELAIS_Field
+ELAIS_Fl025  00  32  00.42  -44  11  28.76  P   2  19.75 0      ELAIS_Field
+ELAIS_Fl026  00  30  11.33  -43  14  42.55  P   2  20.00 0      ELAIS_Field
+ELAIS_Fl027  00  30  26.77  -43  12  34.24  P   2  18.74 0      ELAIS_Field
+ELAIS_Fl028  00  29  32.61  -43  23  10.58  P   2  19.82 0      ELAIS_Field
+ELAIS_Fl029  00  34  44.38  -43  18  06.25  P   2  19.31 0      ELAIS_Field
+ELAIS_Fl030  00  31  17.57  -42  54  57.04  P   2  19.52 0      ELAIS_Field
+ELAIS_Fl031  00  38  18.40  -42  51  49.28  P   2  18.04 0      ELAIS_Field
+ELAIS_Fl032  00  34  03.47  -42  59  02.25  P   2  17.74 0      ELAIS_Field
+ELAIS_Fl033  00  37  13.16  -42  49  45.78  P   2  18.80 0      ELAIS_Field
+ELAIS_Fl034  00  38  08.05  -43  29  03.46  P   2  18.91 0      ELAIS_Field
+ELAIS_Fl035  00  34  01.80  -43  06  35.03  P   2  19.32 0      ELAIS_Field
+ELAIS_Fl036  00  34  00.28  -43  24  01.13  P   2  19.16 0      ELAIS_Field
+ELAIS_Fl037  00  37  52.12  -43  07  43.32  P   2  17.94 0      ELAIS_Field
+ELAIS_Fl038  00  37  29.10  -43  34  20.62  P   2  19.20 0      ELAIS_Field
+ELAIS_Fl039  00  33  16.83  -44  11  58.59  P   2  17.96 0      ELAIS_Field
+ELAIS_Fl040  00  32  36.50  -43  38  18.00  P   2  19.57 0      ELAIS_Field
+ELAIS_Fl041  00  35  18.28  -43  07  59.22  P   2  18.84 0      ELAIS_Field
+ELAIS_Fl042  00  33  40.28  -43  25  41.64  P   2  18.31 0      ELAIS_Field
+ELAIS_Fl043  00  34  48.69  -42  52  00.61  P   2  18.08 0      ELAIS_Field
+ELAIS_Fl044  00  33  09.75  -43  20  33.97  P   2  19.16 0      ELAIS_Field
+ELAIS_Fl045  00  35  47.38  -43  05  58.80  P   2  19.49 0      ELAIS_Field
+ELAIS_Fl046  00  33  07.57  -43  09  28.36  P   2  19.56 0      ELAIS_Field
+ELAIS_Fl047  00  37  21.91  -42  53  21.10  P   2  18.83 0      ELAIS_Field
+ELAIS_Fl048  00  36  35.91  -43  10  53.36  P   2  17.25 0      ELAIS_Field
+ELAIS_Fl049  00  39  29.12  -43  41  30.29  P   2  17.88 0      ELAIS_Field
+ELAIS_Fl050  00  37  32.21  -42  41  09.34  P   2  19.80 0      ELAIS_Field
+ELAIS_Fl051  00  34  49.09  -42  43  15.74  P   2  18.37 0      ELAIS_Field
+ELAIS_Fl052  00  37  57.29  -42  50  27.97  P   2  18.59 0      ELAIS_Field
+ELAIS_Fl053  00  39  31.13  -43  22  32.84  P   2  17.77 0      ELAIS_Field
+ELAIS_Fl054  00  37  36.68  -43  20  56.70  P   2  19.02 0      ELAIS_Field
+ELAIS_Fl055  00  30  54.39  -43  35  00.49  P   2  18.93 0      ELAIS_Field
+ELAIS_Fl056  00  30  55.18  -42  54  55.75  P   2  18.15 0      ELAIS_Field
+ELAIS_Fl057  00  30  40.52  -44  01  37.85  P   2  18.53 0      ELAIS_Field
+ELAIS_Fl058  00  34  17.56  -42  46  56.47  P   2  19.82 0      ELAIS_Field
+ELAIS_Fl059  00  39  13.44  -43  19  21.67  P   2  19.72 0      ELAIS_Field
+ELAIS_Fl060  00  31  21.91  -43  05  00.75  P   2  18.67 0      ELAIS_Field
+ELAIS_Fl061  00  38  41.92  -43  43  06.54  P   2  19.67 0      ELAIS_Field
+ELAIS_Fl062  00  38  03.32  -43  38  48.07  P   2  19.71 0      ELAIS_Field
+ELAIS_Fl063  00  39  24.89  -43  27  27.65  P   2  19.97 0      ELAIS_Field
+ELAIS_Fl064  00  38  37.09  -42  59  21.27  P   2  18.62 0      ELAIS_Field
+ELAIS_Fl065  00  33  30.68  -42  29  37.04  P   2  19.40 0      ELAIS_Field
+ELAIS_Fl066  00  37  27.10  -42  55  23.38  P   2  18.19 0      ELAIS_Field
+ELAIS_Fl067  00  36  16.85  -42  50  14.24  P   2  19.47 0      ELAIS_Field
+ELAIS_Fl068  00  37  11.90  -43  07  11.82  P   2  18.38 0      ELAIS_Field
+ELAIS_Fl069  00  35  46.21  -44  00  00.26  P   2  19.90 0      ELAIS_Field
+ELAIS_Fl070  00  34  33.64  -44  01  21.79  P   2  19.88 0      ELAIS_Field
+ELAIS_Fl071  00  35  49.09  -43  00   7.99  P   2  19.92 0      ELAIS_Field
+ELAIS_Fl072  00  34  30.49  -42  57  20.53  P   2  19.65 0      ELAIS_Field
+ELAIS_Fl073  00  35  33.51  -44  21  50.08  P   2  19.18 0      ELAIS_Field
+ELAIS_Fl074  00  33  13.14  -43  09  57.42  P   2  19.98 0      ELAIS_Field
+ELAIS_Fl075  00  33  54.32  -44  20  34.41  P   2  19.82 0      ELAIS_Field
+ELAIS_Fl076  00  37  43.30  -42  57  24.28  P   2  18.98 0      ELAIS_Field
+ELAIS_Fl077  00  39  35.79  -43  41  44.32  P   2  19.70 0      ELAIS_Field
+ELAIS_Fl078  00  31  02.33  -43  34  55.23  P   2  19.34 0      ELAIS_Field
+ELAIS_Fl079  00  37  18.14  -42  44  05.97  P   2  19.52 0      ELAIS_Field
+ELAIS_Fl080  00  30  13.97  -42  53  26.50  P   2  19.75 0      ELAIS_Field
+ELAIS_Fl081  00  34  26.25  -42  37  06.53  P   2  18.81 0      ELAIS_Field
+ELAIS_Fl082  00  37  07.97  -43  48  30.61  P   2  19.64 0      ELAIS_Field
+ELAIS_Fl083  00  34  45.84  -43  00  28.55  P   2  19.84 0      ELAIS_Field
+ELAIS_Fl084  00  38  34.40  -43  04  11.67  P   2  19.90 0      ELAIS_Field
+ELAIS_Fl085  00  31  26.82  -42  42  32.25  P   2  17.34 0      ELAIS_Field
+ELAIS_Fl086  00  36  26.96  -43  00  06.29  P   2  19.22 0      ELAIS_Field
+ELAIS_Fl087  00  31  51.83  -43  04  49.75  P   2  18.79 0      ELAIS_Field
+ELAIS_Fl088  00  32  05.99  -44  14  34.38  P   2  19.98 0      ELAIS_Field
+ELAIS_Fl089  00  35  55.34  -43  43  12.88  P   2  17.70 0      ELAIS_Field
+ELAIS_Fl090  00  31  37.90  -43  02  06.78  P   2  18.53 0      ELAIS_Field
+ELAIS_Fl091  00  36  36.97  -43  32  37.97  P   2  19.80 0      ELAIS_Field
+ELAIS_Fl092  00  29  28.53  -43  40  33.68  P   2  19.82 0      ELAIS_Field
+ELAIS_Fl093  00  36  17.39  -43  20  35.83  P   2  19.94 0      ELAIS_Field
+ELAIS_Fl094  00  35  15.96  -43  20  21.83  P   2  18.99 0      ELAIS_Field
+ELAIS_Fl095  00  30  55.17  -43  27  38.49  P   2  18.88 0      ELAIS_Field
+ELAIS_Fl096  00  32  56.53  -44  14  51.10  P   2  18.91 0      ELAIS_Field
+ELAIS_Fl097  00  32  40.47  -43  31  13.00  P   2  18.60 0      ELAIS_Field
+ELAIS_Fl098  00  33  49.60  -43  13  40.54  P   2  19.04 0      ELAIS_Field
+ELAIS_Fl099  00  31  19.88  -42  56  46.32  P   2  19.50 0      ELAIS_Field
+ELAIS_Fl100  00  36  05.53  -43  40  23.68  P   2  19.21 0      ELAIS_Field
+ELAIS_Fl101  00  33  40.96  -42  40  56.28  P   2  18.48 0      ELAIS_Field
+ELAIS_Fl102  00  32  07.72  -43  39  16.07  P   2  19.54 0      ELAIS_Field
+ELAIS_Fl103  00  30  34.07  -44  02  55.64  P   2  19.52 0      ELAIS_Field
+ELAIS_Fl104  00  38  31.85  -42  56  48.18  P   2  19.94 0      ELAIS_Field
+ELAIS_Fl105  00  37  10.21  -43  25  24.18  P   2  19.25 0      ELAIS_Field
+ELAIS_Fl106  00  35  49.62  -44  04  59.75  P   2  17.66 0      ELAIS_Field
+ELAIS_Fl107  00  39  05.07  -43  47  57.51  P   2  19.89 0      ELAIS_Field
+ELAIS_Fl108  00  39  40.22  -43  04  49.44  P   2  19.77 0      ELAIS_Field
+ELAIS_Fl109  00  37  49.96  -44  07  09.10  P   2  19.16 0      ELAIS_Field
+ELAIS_Fl110  00  32  27.82  -43  15  40.61  P   2  18.24 0      ELAIS_Field
+ELAIS_Fl111  00  29  56.68  -43  35  11.90  P   2  18.66 0      ELAIS_Field
+ELAIS_Fl112  00  39  25.17  -43  22  14.25  P   2  19.93 0      ELAIS_Field
+ELAIS_Fl113  00  35  27.01  -44  20  03.15  P   2  19.78 0      ELAIS_Field
+ELAIS_Fl114  00  35  41.16  -43  41  09.81  P   2  18.44 0      ELAIS_Field
+ELAIS_Fl115  00  37  31.26  -42  47  01.10  P   2  19.27 0      ELAIS_Field
+ELAIS_Fl116  00  37  30.06  -42  50  55.62  P   2  18.75 0      ELAIS_Field
+ELAIS_Fl117  00  35  54.05  -43  32  18.77  P   2  19.84 0      ELAIS_Field
+ELAIS_Fl118  00  39  23.39  -43  28  13.53  P   2  18.46 0      ELAIS_Field
+ELAIS_Fl119  00  31  55.74  -43  18  32.64  P   2  18.25 0      ELAIS_Field
+ELAIS_Fl120  00  35  32.08  -42  49  22.17  P   2  19.31 0      ELAIS_Field
+ELAIS_Fl121  00  34  12.16  -43  11  29.71  P   2  18.53 0      ELAIS_Field
+ELAIS_Fl122  00  37  34.45  -44  18  07.66  P   2  19.49 0      ELAIS_Field
+ELAIS_Fl123  00  31  33.45  -43  50  47.90  P   2  19.89 0      ELAIS_Field
+ELAIS_Fl124  00  37  49.36  -43  24  36.49  P   2  18.60 0      ELAIS_Field
+ELAIS_Fl125  00  31  06.30  -43  25  35.71  P   2  17.01 0      ELAIS_Field
+ELAIS_Fl126  00  34  47.08  -44  22  06.31  P   2  19.36 0      ELAIS_Field
+ELAIS_Fl127  00  34  01.80  -43  06  35.03  P   2  19.32 0      ELAIS_Field
+ELAIS_Fl128  00  30  42.77  -42  54  01.45  P   2  19.62 0      ELAIS_Field
+ELAIS_Fl129  00  30  32.04  -43  18  16.79  P   2  18.93 0      ELAIS_Field
+ELAIS_Fl130  00  37  51.22  -43  59  33.80  P   2  18.00 0      ELAIS_Field
+ELAIS_Fl131  00  32  23.89  -43  04  54.74  P   2  19.95 0      ELAIS_Field
+ELAIS_Fl132  00  34  35.46  -43  41  05.10  P   2  17.08 0      ELAIS_Field
+ELAIS_Fl133  00  33  40.86  -43  07  08.76  P   2  19.53 0      ELAIS_Field
+ELAIS_Fl134  00  35  25.53  -43  03  11.71  P   2  19.16 0      ELAIS_Field
+ELAIS_Fl135  00  34  58.28  -42  48  06.33  P   2  19.12 0      ELAIS_Field
+ELAIS_Fl136  00  29  28.36  -43  43  09.49  P   2  19.84 0      ELAIS_Field
+ELAIS_Fl137  00  35  41.13  -44  25  04.70  P   2  18.06 0      ELAIS_Field
+ELAIS_Fl138  00  33  23.02  -43  05  35.89  P   2  17.99 0      ELAIS_Field
+ELAIS_Fl139  00  29  41.53  -43  17  22.20  P   2  18.44 0      ELAIS_Field
+ELAIS_Fl140  00  37  19.72  -43  10  08.92  P   2  19.46 0      ELAIS_Field
+ELAIS_Fl141  00  32  16.89  -44  02  11.56  P   2  19.67 0      ELAIS_Field
+ELAIS_Fl142  00  37  26.80  -44  12  01.21  P   2  19.52 0      ELAIS_Field
+ELAIS_Fl143  00  31  51.91  -43  51  54.65  P   2  17.62 0      ELAIS_Field
+ELAIS_Fl144  00  31  52.53  -43  33  15.79  P   2  18.25 0      ELAIS_Field
+ELAIS_Fl145  00  35  44.32  -43  49  47.98  P   2  18.47 0      ELAIS_Field
+ELAIS_Fl146  00  29  17.02  -43  38  57.59  P   2  19.93 0      ELAIS_Field
+ELAIS_Fl147  00  33  19.80  -42  31  38.92  P   2  19.72 0      ELAIS_Field
+ELAIS_Fl148  00  32  19.73  -43  27  07.91  P   2  19.80 0      ELAIS_Field
+ELAIS_Fl149  00  33  13.11  -44  13  34.77  P   2  19.54 0      ELAIS_Field
+ELAIS_Fl150  00  39  15.48  -43  54  25.99  P   2  19.12 0      ELAIS_Field
+ELAIS_Fl151  00  37  28.15  -43  48  18.94  P   2  19.67 0      ELAIS_Field
+ELAIS_Fl152  00  29  56.53  -43  21  42.84  P   2  19.18 0      ELAIS_Field
+ELAIS_Fl153  00  35  03.26  -43  00  42.17  P   2  19.18 0      ELAIS_Field
+ELAIS_Fl154  00  33  16.51  -44  10  43.03  P   2  18.89 0      ELAIS_Field
+ELAIS_Fl155  00  32  17.47  -43  54  46.81  P   2  18.90 0      ELAIS_Field
+ELAIS_Fl156  00  38  59.03  -42  56  35.65  P   2  19.68 0      ELAIS_Field
+ELAIS_Fl157  00  33  01.53  -43  42  22.18  P   2  19.27 0      ELAIS_Field
+ELAIS_Fl158  00  32  14.20  -43  26  28.18  P   2  19.64 0      ELAIS_Field
+ELAIS_Fl159  00  34  19.85  -43  29  28.15  P   2  18.84 0      ELAIS_Field
+ELAIS_Fl160  00  35  46.67  -44  15  23.79  P   2  18.54 0      ELAIS_Field
+ELAIS_Fl161  00  37  27.10  -42  55  06.64  P   2  19.89 0      ELAIS_Field
+ELAIS_Fl162  00  33  01.89  -43  37  40.47  P   2  19.97 0      ELAIS_Field
+ELAIS_Fl163  00  32  44.74  -43  14  18.97  P   2  19.93 0      ELAIS_Field
+ELAIS_Fl164  00  35  57.25  -43  51  47.22  P   2  19.60 0      ELAIS_Field
+ELAIS_Fl165  00  35  47.76  -43  35  46.17  P   2  19.40 0      ELAIS_Field
+ELAIS_Fl166  00  38  48.12  -43  00  01.36  P   2  19.26 0      ELAIS_Field
+ELAIS_Fl167  00  34  43.40  -42  33  11.71  P   2  18.94 0      ELAIS_Field
+ELAIS_Fl168  00  34  01.23  -43  24  27.69  P   2  17.23 0      ELAIS_Field
+ELAIS_Fl169  00  35  41.42  -42  54  20.67  P   2  19.81 0      ELAIS_Field
+ELAIS_Fl170  00  31  47.89  -43  41  08.02  P   2  20.00 0      ELAIS_Field
+ELAIS_Fl171  00  30  45.77  -43  16  05.33  P   2  19.63 0      ELAIS_Field
+ELAIS_Fl172  00  34  42.45  -43  42  13.89  P   2  17.52 0      ELAIS_Field
+ELAIS_Fl173  00  35  56.52  -44  01  36.09  P   2  19.49 0      ELAIS_Field
+ELAIS_Fl174  00  36  30.88  -42  49  09.87  P   2  17.80 0      ELAIS_Field
+ELAIS_Fl175  00  35  00.01  -44  21  59.42  P   2  19.60 0      ELAIS_Field
+ELAIS_Fl176  00  34  21.01  -44  24  05.13  P   2  19.25 0      ELAIS_Field
+ELAIS_Fl177  00  39  22.53  -43  40  23.47  P   2  17.83 0      ELAIS_Field
+ELAIS_Fl178  00  30  23.10  -43  59  44.15  P   2  18.82 0      ELAIS_Field
+ELAIS_Fl179  00  34  24.83  -42  58  15.55  P   2  19.56 0      ELAIS_Field
+ELAIS_Fl180  00  39  02.63  -43  33  17.74  P   2  18.06 0      ELAIS_Field
+ELAIS_Fl181  00  32  03.96  -42  51  29.48  P   2  18.66 0      ELAIS_Field
+ELAIS_Fl182  00  35  18.34  -43  57  02.34  P   2  18.85 0      ELAIS_Field
+ELAIS_Fl183  00  37  09.30  -42  39  18.97  P   2  18.92 0      ELAIS_Field
+ELAIS_Fl184  00  34  44.92  -44  22  19.69  P   2  17.71 0      ELAIS_Field
+ELAIS_Fl185  00  34  37.34  -42  32  26.06  P   2  18.54 0      ELAIS_Field
+ELAIS_Fl186  00  31  45.28  -43  45  53.41  P   2  19.52 0      ELAIS_Field
+ELAIS_Fl187  00  38  47.07  -44  00  18.32  P   2  18.76 0      ELAIS_Field
+ELAIS_Fl188  00  32  35.42  -43  01  53.71  P   2  17.62 0      ELAIS_Field
+ELAIS_Fl189  00  31  23.43  -42  49  07.33  P   2  18.38 0      ELAIS_Field
+ELAIS_Fl190  00  32  06.37  -43  40  21.48  P   2  18.79 0      ELAIS_Field
+ELAIS_Fl191  00  29  12.19  -43  23  56.00  P   2  19.89 0      ELAIS_Field
+ELAIS_Fl192  00  33  58.48  -43  05  46.94  P   2  18.52 0      ELAIS_Field
+ELAIS_Fl193  00  39  40.62  -43  18  33.41  P   2  19.26 0      ELAIS_Field
+ELAIS_Fl194  00  31  31.75  -44  11  59.36  P   2  18.76 0      ELAIS_Field
+ELAIS_Fl195  00  35  18.34  -43  57  02.34  P   2  18.85 0      ELAIS_Field
+ELAIS_Fl196  00  35  14.66  -42  45  09.98  P   2  17.47 0      ELAIS_Field
+ELAIS_Fl197  00  32  09.23  -42  41  45.78  P   2  19.51 0      ELAIS_Field
+ELAIS_Fl198  00  29  09.89  -43  35  40.25  P   2  19.94 0      ELAIS_Field
+ELAIS_Fl199  00  34  48.78  -43  07  12.40  P   2  19.66 0      ELAIS_Field
+ELAIS_Fl200  00  31  55.37  -43  10  48.15  P   2  19.73 0      ELAIS_Field
+ELAIS_Fl201  00  39  16.03  -43  46  13.65  P   2  19.01 0      ELAIS_Field
+ELAIS_Fl202  00  40  05.84  -43  28  12.64  P   2  19.47 0      ELAIS_Field
+ELAIS_Fl203  00  31  23.43  -42  49  07.33  P   2  18.38 0      ELAIS_Field
+ELAIS_Fl204  00  36  51.66  -44  02  38.03  P   2  18.74 0      ELAIS_Field
+ELAIS_Fl205  00  36  35.87  -43  03  39.44  P   2  18.04 0      ELAIS_Field
+ELAIS_Fl206  00  35  32.08  -42  49  22.17  P   2  19.31 0      ELAIS_Field
+ELAIS_Fl207  00  34  52.71  -44  23  32.49  P   2  18.66 0      ELAIS_Field
+ELAIS_Fl208  00  35  25.47  -43  37  16.13  P   2  19.99 0      ELAIS_Field
+ELAIS_Fl209  00  33  15.26  -42  55  24.55  P   2  19.04 0      ELAIS_Field
+ELAIS_Fl210  00  33  19.40  -42  35  49.23  P   2  19.67 0      ELAIS_Field
+ELAIS_Fl211  00  36  39.90  -43  32  04.87  P   2  19.04 0      ELAIS_Field
+ELAIS_Fl212  00  31  33.29  -43  15  22.11  P   2  19.01 0      ELAIS_Field
+ELAIS_Fl213  00  37  45.40  -43  09  58.12  P   2  18.28 0      ELAIS_Field
+ELAIS_Fl214  00  32  57.39  -44  23  21.11  P   2  19.48 0      ELAIS_Field
+ELAIS_Fl215  00  38  33.85  -42  48  51.67  P   2  19.90 0      ELAIS_Field
+ELAIS_Fl216  00  36  19.23  -43  24  55.22  P   2  18.83 0      ELAIS_Field
+ELAIS_Fl217  00  32  57.12  -43  51  48.53  P   2  19.88 0      ELAIS_Field
+ELAIS_Fl218  00  36  08.59  -43  08  02.62  P   2  18.24 0      ELAIS_Field
+ELAIS_Fl219  00  36  13.21  -44  25  21.60  P   2  17.38 0      ELAIS_Field
+ELAIS_Fl220  00  34  02.93  -43  57  29.03  P   2  19.68 0      ELAIS_Field
+ELAIS_Fl221  00  37  32.50  -42  37  51.57  P   2  19.75 0      ELAIS_Field
+ELAIS_Fl222  00  30  19.87  -43  18  57.69  P   2  19.85 0      ELAIS_Field
+ELAIS_Fl223  00  38  19.94  -43  44  37.92  P   2  18.72 0      ELAIS_Field
+ELAIS_Fl224  00  30  19.92  -43  07  18.12  P   2  19.26 0      ELAIS_Field
+ELAIS_Fl225  00  34  12.80  -42  54  40.93  P   2  19.15 0      ELAIS_Field
+ELAIS_Fl226  00  36  34.40  -44  11  22.00  P   2  18.74 0      ELAIS_Field
+ELAIS_Fl227  00  39  54.61  -43  39  42.10  P   2  19.91 0      ELAIS_Field
+ELAIS_Fl228  00  36  30.93  -42  45  52.82  P   2  18.41 0      ELAIS_Field
+ELAIS_Fl229  00  32  19.46  -42  39  23.23  P   2  19.70 0      ELAIS_Field
+ELAIS_Fl230  00  33  46.68  -42  54  13.20  P   2  19.16 0      ELAIS_Field 
+EFOSC_flux1  00  35  20.10  -43  36  45.59  P   5  18.11 0      EFOSC_Flxchk
+EFOSC_flux2  00  35  46.65  -43  03  40.08  P   5  17.21 0      EFOSC_Flxchk
+EFOSC_flux3  00  29  33.85  -43  52  40.90  P   5  17.74 0      EFOSC_Flxchk
+EFOSC_flux4  00  38  14.10  -43  33  14.90  P   5  18.01 0      EFOSC_Flxchk
+EFOSC_flux5  00  36  35.10  -43  01  33.71  P   5  17.56 0      EFOSC_Flxchk
+DFOSC_flux1  00  35  46.65  -43  03  40.08  P   5  17.21 0      DFOSC_Flxchk
+DFOSC_flux2  00  39  51.60  -43  13  42.09  P   5  17.14 0      DFOSC_Flxchk
+DFOSC_flux3  00  40  14.70  -43  20  10.00  P   5  17.16 0      DFOSC_Flxchk
+DFOSC_flux4  00  30  14.16  -43  39  36.50  P   5  17.23 0      DFOSC_Flxchk
+DFOSC_flux5  00  37  07.05  -42  51  14.10  P   5  17.33 0      DFOSC_Flxchk
+*
+* End source list
+*
+* Sky Positions
+*
+sky-01   00 29 42.33  -43 19 31.72   S   8   99.9   0  blank sky
+sky-02   00 29 51.85  -43 49 40.91   S   8   99.9   0  blank sky
+sky-03   00 29 57.31  -43 03 26.69   S   8   99.9   0  blank sky
+sky-04   00 31 51.59  -43 56 06.00   S   8   99.9   0  blank sky
+sky-05   00 31 51.39  -43 16 38.91   S   8   99.9   0  blank sky
+sky-06   00 32 31.05  -43 42 53.62   S   8   99.9   0  blank sky
+sky-07   00 32 38.25  -43 22 26.18   S   8   99.9   0  blank sky
+sky-08   00 33 01.80  -42 44 57.02   S   8   99.9   0  blank sky
+sky-11   00 33 21.60  -42 37 12.92   S   8   99.9   0  blank sky
+sky-12   00 33 30.15  -42 46 36.61   S   8   99.9   0  blank sky
+sky-13   00 33 37.05  -44 21 46.42   S   8   99.9   0  blank sky
+sky-14   00 33 40.35  -43 23 33.11   S   8   99.9   0  blank sky
+sky-15   00 33 45.30  -44 10 31.49   S   8   99.9   0  blank sky
+sky-16   00 34 06.00  -42 33 12.61   S   8   99.9   0  blank sky
+sky-18   00 34 14.55  -43 17 59.19   S   8   99.9   0  blank sky
+sky-19   00 34 34.05  -43 06 41.29   S   8   99.9   0  blank sky
+sky-20   00 34 41.70  -44 08 12.61   S   8   99.9   0  blank sky
+sky-21   00 34 43.65  -42 34 55.20   S   8   99.9   0  blank sky
+sky-22   00 34 57.45  -43 23 55.12   S   8   99.9   0  blank sky
+sky-23   00 34 59.70  -44 10 28.10   S   8   99.9   0  blank sky
+sky-24   00 35 05.55  -42 49 06.92   S   8   99.9   0  blank sky
+sky-25   00 35 31.35  -43 32 39.52   S   8   99.9   0  blank sky
+sky-26   00 35 37.35  -43 10 24.40   S   8   99.9   0  blank sky
+sky-27   00 35 38.10  -43 33 45.60   S   8   99.9   0  blank sky
+sky-28   00 35 39.45  -43 21 47.29   S   8   99.9   0  blank sky
+sky-29   00 35 48.45  -43 53 04.30   S   8   99.9   0  blank sky
+sky-30   00 35 49.05  -42 58 17.41   S   8   99.9   0  blank sky
+sky-31   00 36 04.65  -43 00 40.09   S   8   99.9   0  blank sky
+sky-32   00 36 21.75  -43 53 01.70   S   8   99.9   0  blank sky
+sky-33   00 36 35.85  -42 40 44.49   S   8   99.9   0  blank sky
+sky-34   00 36 37.20  -43 23 06.90   S   8   99.9   0  blank sky
+sky-35   00 36 44.25  -44 08 39.61   S   8   99.9   0  blank sky
+sky-36   00 36 53.10  -42 58 33.70   S   8   99.9   0  blank sky
+sky-37   00 37 18.30  -44 07 33.18   S   8   99.9   0  blank sky
+sky-38   00 37 39.09  -43 39 40.32   S   8   99.9   0  blank sky 
+sky-39   00 37 52.20  -43 30 39.51   S   8   99.9   0  blank sky
+sky-40   00 38 12.45  -44 08 07.19   S   8   99.9   0  blank sky
+sky-41   00 38 48.00  -43 41 54.21   S   8   99.9   0  blank sky
+sky-42   00 39 06.90  -43 08 43.89   S   8   99.9   0  blank sky
+
+
+
+
+
