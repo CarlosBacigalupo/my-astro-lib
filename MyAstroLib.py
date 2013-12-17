@@ -3,7 +3,7 @@ import numpy as np
 import scipy.constants as const
 from scipy import signal
 import pylab as plt
-import matplotlib.cm as cm    
+import matplotlib.cm as cm
 
 import RVSimulator as RVS
 import tools
