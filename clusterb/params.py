@@ -1,7 +1,7 @@
-from tools import  *
+from toolbox import  *
 
 
-DATA_DIR = 'targets/47_tuc/'
+DATA_DIR = '/Users/Carlos/Documents/HERMES/reductions/m67'
 
 
 

@@ -9,7 +9,7 @@
 #INFO	-ref=VIZ5254f45f1557	
 #INFO	-out.max=50	
 #INFO	queryParameters=28	
-#-oc.form=dec
+#-oc.form=dec	
 #-out.max=50
 #-sort=_r
 #-nav=cat:I/317&tab:{I/317/sample}&key:source=ppmxl&pos:NGC104(   1 deg J2000)&HTTPPRM:&&-ref=VIZ5254f45f1557&-out.max=50&-out.form=ascii table&-sort=_r&-oc.form=dec&-c=NGC104&-c.eq=J2000&-c.r=  1&-c.u=deg&-c.geom=r&-out.src=I/317/sample&-order=I&-out=RAJ2000&-out=DEJ2000&-out=pmRA&-out=pmDE&-out=Jmag&-out=Hmag&-out=Kmag&-out=b1mag&-out=b2mag&-out=imag&-meta.ucd=0&-meta=0&-usenav=1&-bmark=POST&

@@ -1,12 +1,202 @@
 import numpy as np
-import pylab as p
+import pylab as plt
 import pandas as pd
 import math
+import pyfits as pf
+import toolbox
+
+
 
 # from params import *
-# from tools import *
+
+class field():
+    
+    dataFileNames = []
+    tableFileNames = []
+    FibreTable = []
+    data = []
+    
+#     def __init__(self):
+#         if fileName != '':
+#             self.FibreTable = FibreTable(fileName)
+#             self.fileName = fileName
+    
+    def clear_data(self):
+        dataFileNames = []
+        tableFileNames = []
+        FibreTable = []
+        data = []
 
 
+    def load_data(self):
+        
+        if len(self.dataFileNames) == 0:
+            print 'No <class_name>.dataFileNames specified.'
+            return
+        
+        for i in self.dataFileNames:
+            a = pf.open(i)
+            b = a[0].data
+        
+            if len(self.data)==0:
+                self.data = np.array([b])
+            else:
+                self.data = np.append(self.data, [b])
+        
+            b = FibreTable(i)
+        
+            if len(self.FibreTable)==0:
+                self.FibreTable = np.array([b])
+            else:
+                self.FibreTable = np.append(self.FibreTable, [b])
+        
+    def add_column(self, data, name):
+        
+        self[name] = data
+        print ' Created ' + name + ' column. Unreduced df shape = ' + str(self.df.shape)
+        print ''  
+        
+class FibreTable():
+    
+    fileName = ''
+    fibre = []
+    pivot = []
+    target = []
+    RA_h = []
+    RA_min = []
+    RA_sec = []
+    RA_dec = []
+    Dec_deg = []
+    Dec_min = []
+    Dec_sec = []
+    Dec_dec = []
+    mag = []
+    type = []
+    
+    def __init__(self, fileName):
+
+        self.fileName = fileName
+        self.load_fibre_table()
+    
+        
+    def load_fibre_table(self):
+        
+        self.source = self.fileName.split('.')[-1]
+        
+        if self.source == 'fld':
+            a = np.loadtxt(self.fileName, skiprows = 9, dtype=str)
+            b = a.transpose()
+
+            self.pivot = np.zeros(len(b[0].astype(str)))
+            self.target = b[0].astype(str)
+            self.RA_h = b[1].astype(int)
+            self.RA_min = b[2].astype(int)
+            self.RA_sec = b[3].astype(float)
+            self.Dec_deg = b[4].astype(int)
+            self.Dec_min = b[5].astype(int)
+            self.Dec_sec = b[6].astype(float)
+            self.type = b[7]
+            self.mag = b[9].astype(float)
+            self.calculate_RADec_deg_dec()
+                        
+        elif self.source == 'lis':
+            a = np.loadtxt(self.fileName, skiprows = 9, dtype=str)
+            b = a.transpose()[1:]
+
+            self.pivot = b[0].astype('int')
+            self.target = b[1].astype('str')
+            self.RA_h = b[2].astype('int')
+            self.RA_min = b[3].astype('int')
+            self.RA_sec = b[4].astype('float')
+            self.Dec_deg = b[5].astype('int')
+            self.Dec_min = b[6].astype('int')
+            self.Dec_sec = b[7].astype('float')
+            self.type = b[8]
+            self.mag = b[10].astype('float')
+        
+            self.mag[self.type=='1'] = 0.
+            self.type[self.type=='1'] = 0.
+            self.calculate_RADec_deg_dec()
+            
+        elif ((self.source.lower() == 'fits') or (self.source.lower() == 'fit')):
+            a = pf.open(self.fileName)    
+            for i in range(1,len(a)):
+                fibreType = a[i].header['EXTNAME']
+                if fibreType=='FIBRES' : b = a[i].data
+            
+            self.fibre = np.arange(1,401)
+            self.pivot = b.field('PIVOT')
+            self.target = b.field('NAME').strip()
+            self.RA_dec = b.field('RA')
+            self.Dec_dec = b.field('DEC')
+            self.mag = b.field('MAGNITUDE')
+            self.type = b.field('TYPE')
+
+            self.calculate_RA_from_RA_dec()
+            
+        self.create_dataframe()
+    
+    def create_dataframe(self):
+        
+        d = [ 'pivot','target', 'RA_h', 'RA_min', 'RA_sec', 'RA_dec' , 'Dec_deg', 'Dec_min',  'Dec_sec', 'Dec_dec', 'type', 'mag']
+       
+        tableFrame = np.array([self.pivot, 
+                               self.target, 
+                               self.RA_h, 
+                               self.RA_min, 
+                               self.RA_sec, 
+                               self.RA_dec, 
+                               self.Dec_deg, 
+                               self.Dec_min, 
+                               self.Dec_sec, 
+                               self.Dec_dec, 
+                               self.type, 
+                               self.mag])
+        
+        self.df = build_DataFrame(tableFrame, d)
+
+    def calculate_RA_from_RA_dec(self):
+        
+        self.RA_h, self.RA_min, self.RA_sec = toolbox.dec2sex(self.RA_dec/15)
+        self.Dec_deg, self.Dec_min, self.Dec_sec = toolbox.dec2sex(self.Dec_dec)
+
+    def calculate_RADec_deg_dec(self):
+        
+        self.RA_dec = 15*(self.RA_h + self.RA_min /60. + self.RA_sec /3600.)     
+        self.Dec_dec = self.Dec_deg + self.Dec_min /60. + self.Dec_sec /3600.
+    
+    
+    def plot_positions(self):
+#     DATA_DIR = ''
+#     dataFile = 'NGC2477_XYpos.txt'
+#     a = np.loadtxt(DATA_DIR + dataFile, unpack=True)
+    
+        starID = self.target
+        mag = self.mag
+        x = self.RA_dec
+        y = self.Dec_deg
+        
+        
+        mag_norm = abs(mag/max(mag))
+        mag_norm[mag_norm>=1]=1
+        rgb = np.array(mag_norm) * np.ones((3, len(mag_norm)))
+        colormap = rgb.transpose()
+        #colormap = colormap**(10)
+        
+        
+        fig = plt.figure(facecolor='grey') 
+    #     plt.draw()
+        ax = plt.subplot(111, axisbg='black')
+        plt.scatter(x, y, s=2*mag_norm, lw = 0, color = colormap)
+    #     plt.draw()
+        #fig = figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
+        #scatter(x, y, )
+        plt.show()
+        
+    
+    
+    
+    
 def load_47tuc():
     global DATA_DIR, tidal_rad, pp_cutoff, cluster_centre_sex, mag_max, mag_min, cluster_pm
     
@@ -163,63 +353,68 @@ def plotter_47_tuc(main_table, orig_table):
     
     x_pp = main_table[:,2]
     y_pp = main_table[:,3]
-    fig = p.figure(facecolor='grey') 
-    ax = p.subplot(111, axisbg='black', title = "Proper Motions")
-    p.scatter(x_pp, y_pp, s=5, lw = 0, color = 'blue', label='All stars')
-    p.xlabel('pmRA*cos(Dec) (mas/yr)')
-    p.ylabel('pmDec (mas/yr)')
+    fig = plt.figure(facecolor='grey') 
+    ax = plt.subplot(111, axisbg='black', title = "Proper Motions")
+    plt.scatter(x_pp, y_pp, s=5, lw = 0, color = 'blue', label='All stars')
+    plt.xlabel('pmRA*cos(Dec) (mas/yr)')
+    plt.ylabel('pmDec (mas/yr)')
     ax.legend()
-#     p.show()
+#     plt.show()
  
     x_RA = main_table[:,0]
     y_Dec = main_table[:,1]
-    fig = p.figure(facecolor='grey') 
-    ax = p.subplot(111, axisbg='black', title = "RA vs Dec")
-    p.scatter(x_RA, y_Dec, s=5, lw = 0, color = 'blue', label='All stars')
-    p.xlabel('RA (deg)')
-    p.ylabel('Dec (deg)')
+    fig = plt.figure(facecolor='grey') 
+    ax = plt.subplot(111, axisbg='black', title = "RA vs Dec")
+    plt.scatter(x_RA, y_Dec, s=5, lw = 0, color = 'blue', label='All stars')
+    plt.xlabel('RA (deg)')
+    plt.ylabel('Dec (deg)')
     ax.legend()
-#     p.show()
+#     plt.show()
     
     x_all = orig_table[:,4]-orig_table[:,6]
     y_all = - orig_table[:,4] 
     x_tidal = main_table[:,4]-main_table[:,6]
     y_tidal = - main_table[:,4] 
-    fig = p.figure(facecolor='grey') 
-    ax = p.subplot(111, axisbg='black', title = "J vs. J-K")
-    p.scatter(x_all, y_all, s=5, lw = 0, color = 'blue', label='All stars')
-    p.scatter(x_tidal, y_tidal, s=5, lw = 0, color = 'red', label='Stars selected so far')
-    p.xlabel('J-K (mag)')
-    p.ylabel('J (mag)')
+    fig = plt.figure(facecolor='grey') 
+    ax = plt.subplot(111, axisbg='black', title = "J vs. J-K")
+    plt.scatter(x_all, y_all, s=5, lw = 0, color = 'blue', label='All stars')
+    plt.scatter(x_tidal, y_tidal, s=5, lw = 0, color = 'red', label='Stars selected so far')
+    plt.xlabel('J-K (mag)')
+    plt.ylabel('J (mag)')
     ax.legend()
-#     p.show()
+#     plt.show()
     
     x_all = orig_table[:,4]-orig_table[:,6]
     y_all = - orig_table[:,10] 
     x_tidal = main_table[:,4]-main_table[:,6]
     y_tidal = - main_table[:,10] 
-    fig = p.figure(facecolor='grey') 
-    ax = p.subplot(111, axisbg='black', title = "V vs. J-K")
-    p.scatter(x_all, y_all, s=5, lw = 0, color = 'blue', label='All stars')
-    p.scatter(x_tidal, y_tidal, s=5, lw = 0, color = 'red', label='Stars selected so far')
-    p.xlabel('J-K (mag)')
-    p.ylabel('V (mag)')
+    fig = plt.figure(facecolor='grey') 
+    ax = plt.subplot(111, axisbg='black', title = "V vs. J-K")
+    plt.scatter(x_all, y_all, s=5, lw = 0, color = 'blue', label='All stars')
+    plt.scatter(x_tidal, y_tidal, s=5, lw = 0, color = 'red', label='Stars selected so far')
+    plt.xlabel('J-K (mag)')
+    plt.ylabel('V (mag)')
     ax.legend()
-    p.show()
+    plt.show()
 
 def read_external_file(fileName, skipRows = 0):
-        tableData = np.loadtxt(fileName, unpack=True, skiprows = skipRows)
+        
+        tableData = np.loadtxt(fileName, unpack=True, skiprows = skipRows, dtype = str)
         
         return tableData
 
 
-def build_DataFrame(d, tableData):
+def build_DataFrame(tableData, d = []):
         
     df_dict = {}
     
-    for i in range(len(d)):
-        df_dict[d[i]] = np.array(tableData.field(d[i]))
-        
+    for i in range(len(tableData)):
+        if d == []: 
+            df_dict[str(i)] = np.array(tableData[i])
+        else: 
+#             df_dict[d[i]] = np.array(tableData.field(d[i]))
+            df_dict[d[i]] = np.array(tableData[i])
+
     df = pd.DataFrame(df_dict)
 
     return df
@@ -248,7 +443,7 @@ def build_DataFrame(d, tableData):
 #     #todo. Set constraints her
 
 def plotter():
-    p.ion()
+    plt.ion()
     
     DATA_DIR = ''
     
@@ -269,17 +464,43 @@ def plotter():
     #colormap = colormap**(10)
     
     
-    fig = p.figure(facecolor='grey') 
-    p.draw()
-    ax = p.subplot(111, axisbg='black')
-    p.scatter(x, y, s=2*mag_norm, lw = 0, color = colormap)
-    p.draw()
+    fig = plt.figure(facecolor='grey') 
+    plt.draw()
+    ax = plt.subplot(111, axisbg='black')
+    plt.scatter(x, y, s=2*mag_norm, lw = 0, color = colormap)
+    plt.draw()
     #fig = figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
     #scatter(x, y, )
     
-    p.show()
+    plt.show()
     
     print 'end'
     
+def VO_test():
+    """ Interact with TOPCAT via SAMPy at the most basic level """
 
-
+    import sampy
+    
+    if __name__ == "__main__":
+    
+        # The 'Hub' is for multiple applications to talk to each other.
+        hub = sampy.SAMPHubServer()
+        hub.start()
+    
+        # We need a client that will connect to the Hub. TOPCAT will also
+        # connect to our Hub.
+        client = sampy.SAMPIntegratedClient(metadata={
+            "samp.name": "topdog",
+            "samp.description.text": "Live demos are destined for disaster."
+            })
+        client.connect()
+    
+        # Create a 'callback' - something to do when a point or row is highlighted in TOPCAT
+        def receive_samp_notification(private_key, sender_id, mtype, params, extra):
+            print("Notification of {0} from {0} ({1}): {2}, {3}".format(mtype, sender_id, private_key, params, extra))
+    
+        # Register the callback
+        client.bindReceiveNotification("table.highlight.row", receive_samp_notification)
+        
+        
+# VO_test()
