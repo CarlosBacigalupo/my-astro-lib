@@ -1,3 +1,8 @@
+################################################
+#deprecated
+#part of the HERMES module now
+
+
 import numpy as np
 import pylab as plt
 import pyfits as pf

@@ -1,37 +1,86 @@
-import math
+# import math
 import numpy as np
-import scipy.constants as const
-from scipy import signal
+# import scipy.constants as const
+# from scipy import signal
 import pylab as plt
-import matplotlib.cm as cm
+# import matplotlib.cm as cm
 
-import RVSimulator as RVS
-import TableBrowser as TB
-import clusterb as CB
-import PSF
-import toolbox
-import pandas as pd
+# import RVSimulator as RVS
+# import TableBrowser as TB
+# import clusterb as CB
+# import PSF
+# import toolbox
+# import pandas as pd
 import HERMES
 
- 
-dr2df = HERMES.dr2df()
-batch_dir = '/Users/Carlos/Documents/HERMES/reductions/batch_reductions/'
-dr2df.base_dir = '/Users/Carlos/Documents/HERMES/data/140109/'
-dr2df.dr_dir = '/Users/Carlos/Documents/workspace/2dfdr/5.49/src_code/2dfdr-5.49/bin/'
-dr2df.red_dir = '/Users/Carlos/Documents/HERMES/reductions/m67_complete/'
+a = HERMES.PSF()
 
-ix_array = [range(48,53) ] #2 sets of files for m67 short
-date_array = ['09jan'] #prefix for the filenames
-arc_array=[4] #index of the arc
-flat_array=[5] #index of the flat
+
+a.read_full_image_spatial('gaussian', 400)
+
+# a.read_psf_data('gaussian')
+
+
+
+# #ccd1 single fibre per bundle fit
+# a.base_dir = '/Users/Carlos/Documents/HERMES/reductions/resolution_gayandhi/single/1/'
+# a.scienceFile = a.base_dir + '12nov10063.fits'
+# a.biasFile = a.base_dir + '11novBIAScomb_p0.fits'
+# a.flatFile = a.base_dir + '12nov10063.fits'
+# a.tramLinefile = a.base_dir + '12nov10063tlm.fits'
+# a.sexParamFile = a.base_dir + 'HERMES.sex'
+# a.outputFileName = a.base_dir + 'out.txt'
+# a.nFibres = 10
+# 
+# a.profile = 'gaussian'
+# a.base_dir = '/Users/Carlos/Documents/HERMES/reductions/resolution_gayandhi/'
+# a.out_dir = a.base_dir + 'output'
+# a.flatFile = a.base_dir + '10nov10044.fits'
+# a.tramLinefile = a.base_dir + '10nov10044tlm.fits'
+# a.deadFibres = [41,66, 91, 141,191,241, 294, 307, 341, 391]
+# 
+# a.open_files()
+# a.flatIm_b = a.bias_subtract_from_overscan(a.flatIm, range(-45,-5)) #bias subtract using the last 40 columns(overscan region)
+# # a.bias_subtract()
+# a.nFibres = 400
+# # print a.fit_pShort(a.flatIm[:, 10])
+# 
+# column = 1000
+# flatCurve = a.flatIm_b[:,column]
+# a.write_p400_A_mu(flatCurve)
+# a.write_mu_from_tlm(a.p400_A_mu,column)
+# 
+# p = a.fit_p400_A_mu(flatCurve)
+# a.A = p[0][:a.nFibres]
+# a.write_p400_sigma_gamma(flatCurve)
+# p = a.fit_p400_sigma_gamma(flatCurve)
+
+
+# 
+# print a.fit_10f(a.scienceIm_b[:,10])
  
-for i in range(len(date_array)):
-    dr2df.target_dir = batch_dir + str(i) +'/'
-    dr2df.file_ix = ix_array[i]
-    dr2df.date = date_array[i] 
-    dr2df.arc = arc_array[i] 
-    dr2df.flat = flat_array[i] 
-    dr2df.auto_reduce() 
+ 
+ 
+ 
+ 
+# dr2df = HERMES.dr2df()    
+# batch_dir = '/Users/Carlos/Documents/HERMES/reductions/batch_reductions/'
+# dr2df.base_dir = '/Users/Carlos/Documents/HERMES/data/140109/'
+# dr2df.dr_dir = '/Users/Carlos/Documents/workspace/2dfdr/5.49/src_code/2dfdr-5.49/bin/'
+# dr2df.red_dir = '/Users/Carlos/Documents/HERMES/reductions/m67_complete/'
+# 
+# ix_array = [range(48,53) ] #2 sets of files for m67 short
+# date_array = ['09jan'] #prefix for the filenames
+# arc_array=[4] #index of the arc
+# flat_array=[5] #index of the flat
+#  
+# for i in range(len(date_array)):
+#     dr2df.target_dir = batch_dir + str(i) +'/'
+#     dr2df.file_ix = ix_array[i]
+#     dr2df.date = date_array[i] 
+#     dr2df.arc = arc_array[i] 
+#     dr2df.flat = flat_array[i] 
+#     dr2df.auto_reduce() 
 
 # RV = HERMES.RV()
 # RV.files = ['17dec10039red.fits', '17dec10040red.fits', '17dec10041red.fits']
@@ -328,9 +377,7 @@ def m67_analysis():
     plt.show()
     
     
-def psf_HERMES():
-        a = PSF.HERMES()
-        a.fit_A_PSF()
+
     
 def calculate_dRV_HERMES():
 #Calculates the photon noise limited RV precision based on a given spectrum
