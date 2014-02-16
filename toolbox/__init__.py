@@ -4,7 +4,18 @@ import string
 
 # -*- coding: utf-8 -*-
 from numpy import *
-   
+
+
+def gaussian(x, mu, sigma, A):
+    
+    exp_num = (np.tile(x,len(mu)).reshape(len(mu),len(x)).transpose()-mu)
+    if len(sigma)==1: sigma = np.repeat(sigma, len(mu))
+    if len(A)==1: A = np.repeat(A, len(mu))
+    curve = (A * np.exp(-exp_num**2 /2 /sigma**2)).transpose()
+    curve = curve.sum(0)
+    
+    return curve
+
 def deg2rad(degrees):
    return degrees*pi/180.
 

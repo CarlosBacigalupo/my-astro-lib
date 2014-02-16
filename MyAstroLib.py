@@ -9,16 +9,27 @@ import pylab as plt
 # import TableBrowser as TB
 # import clusterb as CB
 # import PSF
-# import toolbox
+import toolbox
 # import pandas as pd
 import HERMES
 
+
+# x=np.arange(0,100)
+# A=np.array([1,1,1])
+# mu =np.array([25,50,75])
+# sigma = np.array([2,1,0.5])
+# plt.plot(toolbox.gaussian(x,mu,sigma,A))
+# plt.show()
+
+
 a = HERMES.PSF()
+a.cur_camera = 4
+a.imWidth =4100
+columns = range(0, a.imWidth,(a.imWidth-1)/1)
+print 'Columns ',columns
+a.read_full_image_spatial('gaussian', columns)
 
-
-a.read_full_image_spatial('gaussian', 400)
-
-# a.read_psf_data('gaussian')
+# a.read_psf_data('gaussian','ref4.fits',4)
 
 
 
