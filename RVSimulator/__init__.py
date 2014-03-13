@@ -6,9 +6,11 @@ import pylab as plt
 from matplotlib.ticker import ScalarFormatter
 import pyfits as pf
 from math import sqrt, cos, pi
-from scipy import signal, interpolate, optimize
+from scipy import signal, interpolate, optimize, constants
 
-def clean_flux(flux, xDef = 1, lambdas = []):
+c = constants.c
+
+def clean_flux(flux, xDef = 1, lambdas = np.array([])):
 	'''clean a flux array to cross corralate to determine RV shift
 		eliminates NaNs
 		moving median to reduce peaks
@@ -195,19 +197,25 @@ def Q(W, A0):
     -----
 
     '''
-	A0[np.isnan(A0)] = 0
-	Q = sqrt(np.sum(W)/np.sum(A0))
+	Q = 0
+	if np.sum(A0)>0:
+		Q = sqrt(np.sum(W)/np.sum(A0[-np.isnan(A0)]))
 	
 	return Q
 
 def QdRV(Lambda, A0):
 	
-	W1 = W(Lambda, A0)
-	W1[np.isnan(W1)] = 0
-	Q = Q(W1, A0)
-	dRV = c/sqrt(np.sum(W1))
+	A = A0.copy()
+	A[np.isnan(A)]=0
+	W1 = W(Lambda, A)
+# 	W1[np.isnan(W1)] = 0
+	Q_out = 0
+	dRV = 0
+	if np.sum(W1)>0:
+		Q_out = Q(W1, A)
+		dRV = c/sqrt(np.sum(W1[-np.isnan(W1)]))
 	
-	return Q, dRV
+	return Q_out, dRV, W1
 def extract_single_from_2dfdr(fileName, Y):
 	'''
     Extracts a single fibre from a reduced HERMES fits file.

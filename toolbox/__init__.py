@@ -2,7 +2,6 @@ import math
 import numpy as np
 import string
 
-# -*- coding: utf-8 -*-
 from numpy import *
 
 
