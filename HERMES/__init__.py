@@ -21,11 +21,10 @@ import toolbox
 class dr2df():
     
     date = ''
-    base_dir = ''
+    source_dir = ''
     target_dir = ''
     dr_dir = ''
     file_ix = []
-    
 
     def create_file_list(self):
         
@@ -35,14 +34,17 @@ class dr2df():
         self.files4 =  [self.date +'4' + str(name).zfill(4)+ '.fits' for name in self.file_ix]
         
         
-    def create_folders(self):
+    def create_folders(self, overwrite = False):
         result = True 
         try:
             os.rmdir(self.target_dir)
         except OSError as ex:
             if ((ex.errno == 66) or (ex.errno == 17)):
-                print "Target folder not empty."
-                return result
+                if overwrite==True:
+                    print 'Overwriting', self.target_dir
+                else:
+                    print 'Target folder', self.target_dir,' not empty. Overwrite is off. '
+                    return False
             
         os.mkdir(self.target_dir)
         os.mkdir(self.target_dir+'1/')
@@ -54,124 +56,198 @@ class dr2df():
         return result
     
             
-    def auto_reduce(self):
+    def auto_reduce(self, overwrite = False, copyFiles = True, idxFile = 'hermes.idx'):
         
-        if self.create_folders():
-            self.create_file_list()
-        
-            #copy files
-            cam = 0
-            for camList in [self.files1, self.files2, self.files3, self.files4]:
-                cam += 1
-                for i in camList:
-                    src = self.base_dir  + 'ccd_' + str(cam) + '/' + i
-                    dst = self.target_dir + '' + str(cam) + '/' + i
-                    if not os.path.exists(dst):
-                        shutil.copy(src, dst)
+        if (((copyFiles==True) and (self.create_folders(overwrite = overwrite))) or (copyFiles==False)):
+                self.create_file_list()
             
-            # environment vars for os call
-            env = {'PATH': self.dr_dir,
-                   'DISPLAY': '/tmp/launch-Sqjh9Y/org.macosforge.xquartz:0',
-                   }
-            
-                        
-            #start reduction
-            cam = 0  
-            out = 0      
-            for j in [self.files1, self.files2, self.files3, self.files4]:
-                cam += 1
-                os.chdir(self.target_dir + str(cam) + '/')
+                #copy files
+                if copyFiles==True:
+                    cam = 0
+                    for camList in [self.files1, self.files2, self.files3, self.files4]:
+                        cam += 1
+                        for i in camList:
+                            src = self.source_dir  + 'ccd_' + str(cam) + '/' + i
+                            dst = self.target_dir + '' + str(cam) + '/' + i
+                            if not os.path.exists(dst):
+                                shutil.copy(src, dst)
                 
-                #flat
-                result = True 
-                try:
-                    os.rmdir(self.target_dir + str(cam) + '/' + j[self.flat][:-5]+'_outdir')
-                except OSError as ex:
-                    if ex.errno == 66:
-                        print "Target folder not empty."
-                        return False
-                os.mkdir (j[self.flat][:-5]+'_outdir')                   
-                os_command =  'drcontrol'
-                os_command += ' reduce_fflat ' + j[self.flat]
-                os_command += ' -idxfile hermes.idx'
-                os_command += ' -OUT_DIRNAME '  + j[self.flat][:-5]+'_outdir'
-                out = subprocess.call(os_command, env = env, shell = True)
-
-                if out==0: #arc
+                # environment vars for os call
+                env = {'PATH': self.dr_dir,
+                       'DISPLAY': '/tmp/launch-LV1D7U/org.macosforge.xquartz:0',
+                       }
+                
+                            
+                #start reduction
+                cam = 0  
+                out = 0      
+                for j in [self.files1, self.files2, self.files3, self.files4]:
+                    cam += 1
+                    os.chdir(self.target_dir + str(cam) + '/')
+                    print j
+                    print 'arc',j[self.arc]
+                    print 'flat',j[self.flat]
+                    
+                    #flat
                     result = True 
-                     
                     try:
-                        os.rmdir(self.target_dir + str(cam) + '/' + j[self.arc][:-5]+'_outdir')
+                        os.rmdir(self.target_dir + str(cam) + '/' + j[self.flat][:-5]+'_outdir')
                     except OSError as ex:
                         if ex.errno == 66:
                             print "Target folder not empty."
                             return False
-                    os.mkdir(self.target_dir + str(cam) + '/' + j[self.arc][:-5]+'_outdir')                   
+                    os.mkdir (j[self.flat][:-5]+'_outdir')                   
                     os_command =  'drcontrol'
-                    os_command += ' reduce_arc ' + self.target_dir + str(cam) + '/' + j[self.arc]
-                    os_command += ' -idxfile hermes.idx'
-                    os_command += ' -TLMAP_FILENAME ' + self.target_dir + str(cam) + '/' + j[self.flat][:-5] + 'tlm.fits'
-                    os_command += ' -OUT_DIRNAME ' + self.target_dir + str(cam) + '/' + j[self.arc][:-5]+'_outdir'
-                    os_command =  'drcontrol'
-                    os_command += ' reduce_arc '  + j[self.arc]
-                    os_command += ' -idxfile hermes.idx'
-                    os_command += ' -TLMAP_FILENAME ' + j[self.flat][:-5] + 'tlm.fits'
-                    os_command += ' -OUT_DIRNAME ' + j[self.arc][:-5]+'_outdir'
+                    os_command += ' reduce_fflat ' + j[self.flat]
+                    os_command += ' -idxfile ' + idxFile
+                    os_command += ' -OUT_DIRNAME '  + j[self.flat][:-5]+'_outdir'
                     out = subprocess.call(os_command, env = env, shell = True)
-                     
-                    if out==0: #scrunch flat
+    
+                    if out==0: #arc
+                        result = True 
+                         
+                        try:
+                            os.rmdir(self.target_dir + str(cam) + '/' + j[self.arc][:-5]+'_outdir')
+                        except OSError as ex:
+                            if ex.errno == 66:
+                                print "Target folder not empty."
+                                return False
+                        os.mkdir(self.target_dir + str(cam) + '/' + j[self.arc][:-5]+'_outdir')                   
                         os_command =  'drcontrol'
-                        os_command += ' reduce_fflat ' + j[self.flat]
-                        os_command += ' -idxfile hermes.idx'
-                        os_command += ' -WAVEL_FILENAME ' + j[self.arc][:-5] + 'red.fits'
-                        os_command += ' -OUT_DIRNAME ' + j[self.flat][:-5]+'_outdir'
+                        os_command += ' reduce_arc ' + self.target_dir + str(cam) + '/' + j[self.arc]
+                        os_command += ' -idxfile ' + idxFile
+                        os_command += ' -TLMAP_FILENAME ' + self.target_dir + str(cam) + '/' + j[self.flat][:-5] + 'tlm.fits'
+                        os_command += ' -OUT_DIRNAME ' + self.target_dir + str(cam) + '/' + j[self.arc][:-5]+'_outdir'
+                        os_command =  'drcontrol'
+                        os_command += ' reduce_arc '  + j[self.arc]
+                        os_command += ' -idxfile ' + idxFile
+                        os_command += ' -TLMAP_FILENAME ' + j[self.flat][:-5] + 'tlm.fits'
+                        os_command += ' -OUT_DIRNAME ' + j[self.arc][:-5]+'_outdir'
                         out = subprocess.call(os_command, env = env, shell = True)
-                        
-                        obj_files = j[:]
-                        del obj_files[self.arc]
-                        del obj_files[self.flat-1]   #-1 as i just removed 1 element....                       
-                        for obj in obj_files:
-                            result = True             
-                            try:
-                                os.rmdir(obj[:-5]+'_outdir')
-                            except OSError as ex:
-                                if ex.errno == 66:
-                                    print "Target folder not empty."
-                                    return False
-                            os.mkdir(obj[:-5]+'_outdir')                   
-                            if out==0: 
-                                os_command =  'drcontrol'
-                                os_command += ' reduce_object ' + obj
-                                os_command += ' -idxfile hermes.idx'
-                                os_command += ' -WAVEL_FILENAME ' + j[self.arc][:-5] + 'red.fits'
-                                os_command += ' -TLMAP_FILENAME ' + j[self.flat][:-5] + 'tlm.fits'
-                                os_command += ' -FFLAT_FILENAME ' + j[self.flat][:-5] + 'red.fits'
-                                os_command += ' -OUT_DIRNAME ' + obj[:-5]+'_outdir'
-#                                 os_command += ' -TPMETH OFFSKY'
-                                os.system('killall drcontrol')
-                                os.system('killall drexec')
-                                out = subprocess.call(os_command, env = env, shell = True)
-                                shutil.copyfile(obj[:-5]+'red.fits', self.red_dir + obj[:-5]+'red.fits')
-                                
+                         
+                        if out==0: #scrunch flat
+                            os_command =  'drcontrol'
+                            os_command += ' reduce_fflat ' + j[self.flat]
+                            os_command += ' -idxfile ' + idxFile
+                            os_command += ' -WAVEL_FILENAME ' + j[self.arc][:-5] + 'red.fits'
+                            os_command += ' -OUT_DIRNAME ' + j[self.flat][:-5]+'_outdir'
+                            out = subprocess.call(os_command, env = env, shell = True)
+                            
+                            obj_files = np.array(j[:])
+                            mask = (obj_files!=obj_files[self.arc]) & (obj_files!=obj_files[self.flat])
+                            obj_files = obj_files[mask]                       
+                            for obj in obj_files:
+                                result = True             
+                                try:
+                                    os.rmdir(obj[:-5]+'_outdir')
+                                except OSError as ex:
+                                    if ex.errno == 66:
+                                        print 'Target folder (', obj[:-5]+'_outdir', 'not empty.'
+                                        return False
+                                os.mkdir(obj[:-5]+'_outdir')                   
+                                if out==0: 
+                                    os_command =  'drcontrol'
+                                    os_command += ' reduce_object ' + obj
+                                    os_command += ' -idxfile ' + idxFile
+                                    os_command += ' -WAVEL_FILENAME ' + j[self.arc][:-5] + 'red.fits'
+                                    os_command += ' -TLMAP_FILENAME ' + j[self.flat][:-5] + 'tlm.fits'
+                                    os_command += ' -FFLAT_FILENAME ' + j[self.flat][:-5] + 'red.fits'
+                                    os_command += ' -OUT_DIRNAME ' + obj[:-5]+'_outdir'
+    #                                 os_command += ' -TPMETH OFFSKY'
+                                    os.system('killall drcontrol')
+                                    os.system('killall drexec')
+                                    out = subprocess.call(os_command, env = env, shell = True)
+                                    shutil.copyfile(obj[:-5]+'red.fits', '../../cam' +str(cam)+'/'+ obj[:-5]+'red.fits')
+                                    
         
 class RV():
-
+    
+    allFiles = []
+    base_dir = ''
     files = [] #science reduced files to analyse
-    base_dir = ''    
-    JS = 1.1574074074074073e-05  #julian second
-    JD = []
-    Lambda = []
-    fileData = []
-    fibreTable = []
-    header = []
-    c = const.c
+    
+    def __init__(self):
+        self.JS = 1.1574074074074073e-05  #julian second
+        self.JD = []    
+        self.exp = []
+        self.flux = []
+        self.Lambda = []
+        self.fileData = []
+        self.fibreTable = []
+        self.header = []
+        self.c = const.c
+
+        self.magList = []
+        self.RA_decList = []
+        self.Dec_decList = []
+        self.fibreList = []
+        self.pivotList = []
+        self.fileList = []
+        self.targetList = []
     
     
+    def SNR(self, A, skyFlux):
+        
+        A*=2.7
+        skyFlux*=2.7
+        signal = np.sum(A[-np.isnan(A)])
+
+        RON = np.sqrt(16*len(A)*4) #4e-/px and ~4px per resolution element
+        PHN = np.sqrt(signal)
+        SKYN = np.sqrt(np.sum(skyFlux[-np.isnan(skyFlux)]))
+        
+        noise = np.sqrt(RON**2 + PHN**2 + SKYN**2)
+         
+        return signal/noise
+        
     def plot_timeline(self):
         for i in range(len(self.files)):
             plt.plot(np.arange(self.JD[i], self.JD[i]+self.exposed[i],self.JS),np.ones(int(self.exposed[i]/self.JS)+1))
         plt.show()
 
+    def read_single_star_all_curves(self, target):
+        
+        self.__init__()
+
+        for i in self.allFiles:    
+
+            self.load_fibre_table(i)
+            idx = np.where(self.target==target)
+            if len(idx[0])>0: 
+                cleanIdx = idx[0][0]
+                a = pf.open(i)
+                if a[0].header['EXPOSED']==1200:
+                    self.Lambda.append(RVS.extract_HERMES_wavelength(i))
+                    self.flux.append(a[0].data[cleanIdx])
+                    self.JD.append(a[0].header['UTMJD'])
+                    self.exp.append(a[0].header['EXPOSED']/24/3600)
+                    self.magList.append(self.mag[cleanIdx])
+                    self.RA_decList.append(self.RA_dec[cleanIdx] )
+                    self.Dec_decList.append(self.Dec_dec[cleanIdx])
+                    self.fibreList.append(cleanIdx )
+                    self.pivotList.append(self.pivot[cleanIdx])
+                    self.fileList.append(i)
+                    self.targetList.append(self.target[cleanIdx])
+                
+        #order by date
+        index = np.argsort(self.JD)
+
+        self.Lambda = np.array(self.Lambda)[index]
+        self.flux = np.array(self.flux)[index]
+        self.JD = np.array(self.JD)[index]
+        self.exp = np.array(self.exp)[index]
+        self.magList = np.array(self.magList)[index]
+        self.RA_decList = np.array(self.RA_decList)[index]
+        self.Dec_decList = np.array(self.Dec_decList)[index]
+        self.fibreList = np.array(self.fibreList)[index]
+        self.pivotList = np.array(self.pivotList)[index]
+        self.fileList = np.array(self.fileList)[index]
+        self.targetList = np.array(self.targetList)[index]
+        
+#                 allFlux.append([Lambda, thisFlux, thisJD, thisExp])
+        
+#         self.allFlux = allFlux
+    
     def read_fits_files(self):
         
         
@@ -284,6 +360,16 @@ class RV():
                 else:
                     print fibre1[0].strip()
         
+    def RV(self, lambda1, flux1, lambda2, flux2, xDef = 1):
+        
+        lambda1Clean, flux1Clean = RVS.clean_flux(flux1, xDef, lambda1)
+        lambda2Clean, flux2Clean = RVS.clean_flux(flux2, xDef, lambda2)
+
+        a =  np.correlate(flux1Clean, flux2Clean, 'same')
+        deltaLambda = lambda2Clean[len(lambda2Clean)/2] - lambda2Clean[np.where(a==max(a))[0][0]]
+        RV = self.c/lambda2Clean[len(lambda2Clean)/2] * deltaLambda
+        
+        return RV
     
     def calculate_RV_shifts(self):
         
@@ -393,7 +479,10 @@ class RV():
             self.RA_h, self.RA_min, self.RA_sec = toolbox.dec2sex(self.RA_dec/15)   
             self.Dec_deg, self.Dec_min, self.Dec_sec = toolbox.dec2sex(self.Dec_dec)
             
-        return self.create_dataframe()
+            self.fibreTable = b
+            
+        self.create_dataframe()
+ 
     
     def create_dataframe(self):
         
@@ -417,19 +506,18 @@ class RV():
 
 class PSF():
     
-    base_dir = '/Users/Carlos/Documents/HERMES/reductions/resolution_gayandhi/'
-    sexParamFile = base_dir + 'HERMES.sex'
-    outputFileName = base_dir + 'out.txt'
-    scienceFile = base_dir + '10nov40045.fits'
-    biasFile = base_dir + 'BIAScombined4.fits'
-    flatFile = base_dir + '10nov10044.fits'
-    tramLinefile = base_dir + '10nov10044tlm.fits'
-    nFibres = 10
+#     sexParamFile = 'HERMES.sex'
+#     scienceFile = '10nov40045.fits'
+#     biasFile = 'BIAScombined4.fits'
+#     flatFile = '10nov10044.fits'
+#     tramLinefile = '10nov10044tlm.fits'
+#     nFibres = 10
 
     def __init__(self):
-        self.nFibres = 400
-        self.nBundles = 40
+#         self.nFibres = 400
+#         self.nBundles = 40
         self.pShort = []
+        pass
         
     def bias_subtract_from_overscan(self, image, range):
         
@@ -464,7 +552,7 @@ class PSF():
         self.biasIm = self.bias[0].data
 
     def fit_10f(self, flatCurve):
-        #findes best fit for 10f config (5 x 2f) for len(p)=40
+        #finds best fit for 10f config (5 x 2f) for len(p)=40
         
         self.write_p10(flatCurve)
         
@@ -786,7 +874,7 @@ class PSF():
         thisMu = self.mu
         
         #set amplitude of deadfibres to 0
-        thisA[np.array(self.deadFibres[self.cur_camera])-1]=0
+        thisA[np.array(self.deadFibres[self.camera])-1]=0
         
         if self.profile =='voigt':
             thisCurve = a.f(np.arange(len(flatCurve)), thisA,thisSigma,thisGamma,thisMu)
@@ -808,7 +896,10 @@ class PSF():
                 
             
                 model += thisCurve
-                
+        else:
+            print 'no model specified'
+            model = []
+            
         return model
     
     def find_p400_sigma_gamma_curve(self, p, flatCurve, output = False):
@@ -865,15 +956,10 @@ class PSF():
         plt.show()    
         
     def read_full_image_spatial(self, profile, Columns):
-
-        self.base_dir = '/Users/Carlos/Documents/HERMES/reductions/resolution_gayandhi/'
-        self.scienceFile = self.base_dir + '10nov' + str(self.cur_camera) + '0044.fits'
-        self.biasFile = self.base_dir + 'BIAScombined2.fits'
-        self.profile = profile
-        self.out_dir = self.base_dir + ''
-        self.flatFile = self.base_dir + '10nov' + str(self.cur_camera) + '0044.fits'
-        self.tramLinefile = self.base_dir + '10nov' + str(self.cur_camera) + '0044tlm.fits'
-        self.deadFibres = [[],[],[],[], []]
+        #reads spatial psf from flat file for all columns in Columns. 
+        #4 cameras
+        #writes coo
+        self.deadFibres = [[],[],[],[],[]]
         self.deadFibres[1] = [41,66, 91, 141,191, 241, 250, 294, 304, 341, 391]
         self.deadFibres[2] = [41,66, 91, 141,191,241, 294, 307, 341, 391]
         self.deadFibres[3] = [41,66, 91, 141,191,241, 250, 294, 307, 341, 391]
@@ -883,9 +969,9 @@ class PSF():
         self.flatIm_b = self.bias_subtract_from_overscan(self.flatIm, range(-45,-5)) #bias subtract using the last 40 columns(overscan region)
 
         if profile=='voigt':
-            fileOutSpa = open(self.out_dir + 'spatialV'+str(self.cur_camera)+'.txt','w')
+            fileOutSpa = open('spatialV'+str(self.camera)+'.txt','w')
         elif profile=='gaussian':
-            fileOutSpa = open(self.out_dir + 'spatialG'+str(self.cur_camera)+'.txt','w')
+            fileOutSpa = open('spatialG'+str(self.camera)+'.txt','w')
         fileOutSpa.write('fibre, y_cent, A, sigma, gamma, mu \n')
         
         for C in Columns:
@@ -896,7 +982,7 @@ class PSF():
             self.write_mu_from_tlm(C)
             self.write_p400_A_mu(flatCurve)
             p = self.fit_p400_A_mu(flatCurve)
-            print p
+#             print p
             print C, 'column fit took ', time.time() - start_time, "seconds" 
             
 
@@ -934,15 +1020,14 @@ class PSF():
             
         
         self.base_dir = '/Users/Carlos/Documents/HERMES/reductions/resolution_gayandhi/'
-        self.out_dir = self.base_dir + 'output/'
         if profile=='voigt':
-            dataFile = open(self.out_dir + 'spatialV'+str(camera)+'.txt','r')
+            dataFile = open('spatialV'+str(camera)+'.txt','r')
         elif profile=='gaussian':
-            dataFile = open(self.out_dir + 'spatialG'+str(camera)+'.txt','r')
+            dataFile = open('spatialG'+str(camera)+'.txt','r')
 
         a = np.loadtxt(dataFile, skiprows=1, delimiter = ',' , usecols=[0,1,2,3,4,5]).transpose()
     
-        Lambda = RVS.extract_HERMES_wavelength(self.base_dir + referenceFile)
+        Lambda = RVS.extract_HERMES_wavelength(referenceFile)
 
         matplotlib.rcParams['xtick.direction'] = 'out'
         matplotlib.rcParams['ytick.direction'] = 'out'
@@ -1000,7 +1085,7 @@ class PSF():
 #         CB.ax.set_position([ll, b+0.1*h, ww, h*0.8])
         plt.xlabel('Wavelength [Ang]')
         plt.ylabel('Fibre')
-        plt.savefig(self.out_dir + 'contour_' + str(camera) + 'G.png')
+        plt.savefig('contour_' + str(camera) + 'G.png')
         plt.show()
 
         
@@ -1019,7 +1104,7 @@ class PSF():
         plt.xlabel('Wavelength [Ang]')
         plt.ylabel('PSF [px]')
         plt.legend()
-        plt.savefig(self.out_dir + 'lambda_' + str(camera) + 'G.png')
+        plt.savefig('lambda_' + str(camera) + 'G.png')
         plt.show()
         
         #y-binned  plot
@@ -1036,7 +1121,7 @@ class PSF():
         plt.xlabel('Fibre')
         plt.ylabel('PSF [px]')
         plt.legend()
-        plt.savefig(self.out_dir + 'fibre_' + str(camera) + 'G.png')
+        plt.savefig('fibre_' + str(camera) + 'G.png')
         plt.show()
         
         
@@ -1061,7 +1146,7 @@ class PSF():
 #             plt.xlabel('X[Px]')
 #             plt.ylabel('Std. Dev. (px)')
 #             plt.legend()
-# #         plt.savefig(base_dir + 'spa_' + str(cam) + '_y_' + method +'.png')
+# #         plt.savefig('spa_' + str(cam) + '_y_' + method +'.png')
 #         plt.show()
 #     
 #         #bin cols
@@ -1081,7 +1166,7 @@ class PSF():
 #             plt.xlabel('Y-Pixels')
 #             plt.ylabel('Std. Dev. (px)')
 #             plt.legend()
-#         plt.savefig(base_dir + 'spa_' + str(cam) + '_x_' + method +'.png')
+#         plt.savefig('spa_' + str(cam) + '_x_' + method +'.png')
 #         plt.show()
     
     
@@ -1093,7 +1178,7 @@ class PSF():
     #     plt.imshow(grid, origin='lower')
     #     plt.set_cmap(cm.Greys_r)                                                                                    
     #     plt.show()
-    #     pf.writeto(base_dir + 'a.fits', grid)
+    #     pf.writeto('a.fits', grid)
     
     
         #interpolate function
@@ -1105,6 +1190,6 @@ class PSF():
     #     plt.imshow(grid, origin='lower')
     #     plt.set_cmap(cm.Greys_r)                                                                                    
     #     plt.show()
-    #     pf.writeto(base_dir + 'a.fits',grid, clobber= True)
+    #     pf.writeto('a.fits',grid, clobber= True)
 
     

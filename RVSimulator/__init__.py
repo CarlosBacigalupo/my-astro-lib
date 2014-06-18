@@ -172,6 +172,9 @@ def W(Lambda, A0):
 	#compute W (removing last term from Lambda and A0 as dA0dL has n-1 terms.
 	W = Lambda[:-1]**2 * dA0dL**2 / A0[:-1]
 	
+	#clean nans
+	W[np.isnan(W)] = 0
+	
 	return W
 
 
@@ -205,17 +208,16 @@ def Q(W, A0):
 
 def QdRV(Lambda, A0):
 	
-	A = A0.copy()
-	A[np.isnan(A)]=0
-	W1 = W(Lambda, A)
-# 	W1[np.isnan(W1)] = 0
+	W1 = W(Lambda, A0)
 	Q_out = 0
 	dRV = 0
 	if np.sum(W1)>0:
-		Q_out = Q(W1, A)
-		dRV = c/sqrt(np.sum(W1[-np.isnan(W1)]))
+		Q_out = Q(W1, A0)
+		dRV = c/sqrt(np.sum(W1))
 	
-	return Q_out, dRV, W1
+	return Q_out, dRV
+
+
 def extract_single_from_2dfdr(fileName, Y):
 	'''
     Extracts a single fibre from a reduced HERMES fits file.
