@@ -1098,7 +1098,7 @@ class PSF():
             
             plt.imshow(np.log10(self.arcIm_b), origin ='lower', cmap = plt.cm.gray)
             plt.scatter(arcFileMap[:,0],arcFileMap[:,1], s=0.5, c='r', edgecolors='none', alpha = 0.5)
-            plt.title(arcFileMap.shape[0]+' sample points')
+            plt.title(str(arcFileMap.shape[0])+' sample points')
             plt.legend()
             plt.savefig(self.arcFile[:-5], dpi=700.)
             
