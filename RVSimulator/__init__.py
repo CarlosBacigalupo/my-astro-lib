@@ -1,6 +1,6 @@
 
 import numpy as np
-from PyAstronomy import pyTiming
+# from PyAstronomy import pyTiming
 import csv
 import pylab as plt
 from matplotlib.ticker import ScalarFormatter

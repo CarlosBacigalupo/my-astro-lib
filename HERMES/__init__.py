@@ -7,9 +7,9 @@ import os
 import shutil
 import subprocess 
 import math
-from pymodelfit.builtins import VoigtModel
-from pymodelfit.builtins import GaussianModel
-from pymodelfit import get_model_instance
+# from pymodelfit.builtins import VoigtModel
+# from pymodelfit.builtins import GaussianModel
+# from pymodelfit import get_model_instance
 import time
 
 import RVSimulator as RVS
@@ -25,6 +25,7 @@ class dr2df():
     target_dir = ''
     dr_dir = ''
     file_ix = []
+    display = 'localhost:21.0'
 
     def create_file_list(self):
         
@@ -74,7 +75,7 @@ class dr2df():
                 
                 # environment vars for os call
                 env = {'PATH': self.dr_dir,
-                       'DISPLAY': '/tmp/launch-LV1D7U/org.macosforge.xquartz:0',
+                       'DISPLAY': self.display,
                        }
                 
                             
@@ -101,6 +102,7 @@ class dr2df():
                     os_command += ' reduce_fflat ' + j[self.flat]
                     os_command += ' -idxfile ' + idxFile
                     os_command += ' -OUT_DIRNAME '  + j[self.flat][:-5]+'_outdir'
+                    print os_command
                     out = subprocess.call(os_command, env = env, shell = True)
     
                     if out==0: #arc
@@ -123,6 +125,7 @@ class dr2df():
                         os_command += ' -idxfile ' + idxFile
                         os_command += ' -TLMAP_FILENAME ' + j[self.flat][:-5] + 'tlm.fits'
                         os_command += ' -OUT_DIRNAME ' + j[self.arc][:-5]+'_outdir'
+                        print os_command
                         out = subprocess.call(os_command, env = env, shell = True)
                          
                         if out==0: #scrunch flat
@@ -131,6 +134,7 @@ class dr2df():
                             os_command += ' -idxfile ' + idxFile
                             os_command += ' -WAVEL_FILENAME ' + j[self.arc][:-5] + 'red.fits'
                             os_command += ' -OUT_DIRNAME ' + j[self.flat][:-5]+'_outdir'
+                            print os_command
                             out = subprocess.call(os_command, env = env, shell = True)
                             
                             obj_files = np.array(j[:])
@@ -156,6 +160,7 @@ class dr2df():
     #                                 os_command += ' -TPMETH OFFSKY'
                                     os.system('killall drcontrol')
                                     os.system('killall drexec')
+                                    print os_command
                                     out = subprocess.call(os_command, env = env, shell = True)
                                     shutil.copyfile(obj[:-5]+'red.fits', '../../cam' +str(cam)+'/'+ obj[:-5]+'red.fits')
                                     
@@ -517,7 +522,11 @@ class PSF():
 #         self.nFibres = 400
 #         self.nBundles = 40
         self.pShort = []
-        pass
+        self.biasFile=''
+        self.tlmFile=''
+        self.flatFile=''
+        self.arcFile=''
+        self.scienceFile=''
         
     def bias_subtract_from_overscan(self, image, range):
         
@@ -533,23 +542,36 @@ class PSF():
         return image - biasArray      
         
     def bias_subtract(self):
-        self.scienceIm_b = self.scienceIm - self.biasIm       
-        self.flatIm_b = self.flatIm - self.biasIm        
-            
+        if self.scienceFile!='':self.scienceIm_b = self.scienceIm - self.biasIm       
+        if self.flatFile!='':self.flatIm_b = self.flatIm - self.biasIm        
+        if self.arcFile!='':self.arcIm_b = self.arcIm - self.biasIm
+             
     def open_files(self):
         
          #Read, calibrate and create im objects
-        self.bias = pf.open(self.biasFile)
-        self.tlm = pf.open(self.tramLinefile)
-        self.flat = pf.open(self.flatFile)
-        self.science = pf.open(self.scienceFile)
+        if self.biasFile!='':self.bias = pf.open(self.biasFile)
+        if self.tlmFile!='':self.tlm = pf.open(self.tramLinefile)
+        if self.flatFile!='':self.flat = pf.open(self.flatFile)
+        if self.arcFile!='':self.arc = pf.open(self.arcFile)
+        if self.scienceFile!='':self.science = pf.open(self.scienceFile)
 
-        self.imWidth = self.science[0].header['NAXIS1']
-        self.imHeight = self.science[0].header['NAXIS2']
-        self.scienceIm = self.science[0].data     
-        self.tlmIm = self.tlm[0].data
-        self.flatIm = self.flat[0].data
-        self.biasIm = self.bias[0].data
+        if self.scienceFile!='':self.scienceIm = self.science[0].data     
+        if self.tlmFile!='':self.tlmIm = self.tlm[0].data
+        if self.flatFile!='':
+            self.imWidth = self.flat[0].header['NAXIS1']
+            self.imHeight = self.flat[0].header['NAXIS2']
+            self.flatIm = self.flat[0].data
+        if self.arcFile!='':
+            self.imWidth = self.arc[0].header['NAXIS1']
+            self.imHeight = self.arc[0].header['NAXIS2']
+            self.arcIm = self.arc[0].data
+        if self.biasFile!='':self.biasIm = self.bias[0].data
+
+    def create_im_from_arcFileMap(self, refIm):
+        
+       imWidth = refIm.shape[0]
+       imHeight = refIm.shape[1]
+
 
     def fit_10f(self, flatCurve):
         #finds best fit for 10f config (5 x 2f) for len(p)=40
@@ -659,6 +681,30 @@ class PSF():
 #         plt.legend()
 #         plt.show()
         return p
+
+    def fit_single_gaussian(self):
+    
+        factorTry = 100
+        diagTry = np.ones(len(self.pSingleGaussian))
+        maxfev = int(1e3)
+        self.reps=0
+        
+        p = opt.leastsq(self.find_residuals, self.pSingleGaussian, full_output=True)#, args = [curve,0,xRange], factor = factorTry, diag = diagTry, maxfev = maxfev)
+#         print p[0]
+        finalCurve = toolbox.gaussian(self.xRange, sigma = [p[0][0]], mu = [p[0][1]], A = [p[0][2]])
+        
+    #         #comarisson with pymodelfit
+    #         self.reps=0
+    #         self.profile = 'gaussian_fit'
+    #         p = opt.leastsq(self.find_residuals, self.p400_A_mu, full_output=True, args = flatCurve, factor = factorTry, diag = diagTry, maxfev = maxfev)
+    #         finalCurve = self.find_p400_A_mu_curve(p[0],flatCurve, output = False)
+    
+        
+#         plt.plot(self.xRange,self.imCurve)
+#         plt.plot(self.xRange,finalCurve)
+#         plt.show()
+    
+        return p
    
     def write_p10(self, flatCurve):
         
@@ -727,11 +773,11 @@ class PSF():
         
         self.mu = self.tlmIm[:,column]-0.5
         
-    def find_residuals(self, p, flatCurve, output=True):
+    def find_residuals(self, p, output=True):
         self.reps += 1
 
-        if len(p)==len(self.pShort):
-            model = self.find_pShort_curve(p, flatCurve)[0]
+        if len(p)==len(self.pSingleGaussian):
+            model = self.find_pSingle_gaussian(p, output=output)
             
         elif len(p)==len(self.p400_A_mu):
             model = self.find_p400_A_mu_curve(p, flatCurve)
@@ -742,7 +788,8 @@ class PSF():
         elif len(p)==len(self.p10):
             model = self.find_p10_curve(p, flatCurve, output=output)[0]
 
-        diff = flatCurve-model
+
+        diff = self.imCurve-model
 #         plt.plot(flatCurve)
 #         plt.plot(model)
 #         plt.show() 
@@ -750,10 +797,11 @@ class PSF():
         #just output to see progress
         if (((self.reps in [1,2,3,4,5,6,7,8,10,20,50,100, 500, 1000]) or (self.reps in range(1100,10000,100))) and (output==True)):
             print self.reps,
-        if ((self.reps==1) and (output==True)):
-            self.plot(flatCurve, model)
-            
+#         if ((self.reps==1) and (output==True)):
+#             self.plot(flatCurve, model)
+        
         return diff
+    
  
     def find_p10_curve(self, p, flatCurve, output = False, psfFibre = []):
          
@@ -902,6 +950,14 @@ class PSF():
             
         return model
     
+    
+    def find_pSingle_gaussian(self, p, output = False):
+        xRange = self.xRange
+        
+        model = toolbox.gaussian(xRange, sigma = [p[0]], mu = [p[1]], A = [p[2]])                    
+        
+        return model
+
     def find_p400_sigma_gamma_curve(self, p, flatCurve, output = False):
 
         sigma = p[:self.nFibres]
@@ -1000,7 +1056,73 @@ class PSF():
                             '\n' )
                 fileOutSpa.write(outString)
             
-    def read_psf_data(self, profile, referenceFile, camera):
+    def read_full_image_spectral(self, profile):
+        #reads spectral psf from flat file for full image. 
+        #4 cameras
+        #writes coo
+    #         self.deadFibres = [[],[],[],[],[]]
+    #         self.deadFibres[1] = [41,66, 91, 141,191, 241, 250, 294, 304, 341, 391]
+    #         self.deadFibres[2] = [41,66, 91, 141,191,241, 294, 307, 341, 391]
+    #         self.deadFibres[3] = [41,66, 91, 141,191,241, 250, 294, 307, 341, 391]
+    #         self.deadFibres[4] = [41,66, 91, 141,191,241, 250, 294, 307, 341, 391]
+    #         self.nFibres = 400
+        self.open_files()
+#         self.bias_subtract()
+        self.arcIm_b = self.bias_subtract_from_overscan(self.arcIm, range(-45,-5)) #bias subtract using the last 40 columns(overscan region)
+    
+        if profile=='voigt':
+            fileOutSpa = open(self.arcFile+'spectralV'+str(self.camera)+'.txt','w')
+        elif profile=='gaussian':
+            fileOutSpa = open(self.arcFile+'spectralG'+str(self.camera)+'.txt','w')
+        fileOutSpa.write('x_cent, y_cent, A, sigma, gamma, mu \n')
+        
+    
+        #finds peaks using sextractor, returns program output and generated data filename        
+        #adds sex_ to the arc filename for sextractor output
+        outputFileName =  'sex_result.txt'
+        
+        os_command = self.sex_path +'sex ' + self.arcFile + ' -c ' + self.sexParamFile
+        os_command += ' -CATALOG_NAME ' + outputFileName
+        #     os_command = '/usr/local/bin/sex'
+        #     os.system(os_command)
+        proc = subprocess.Popen([os_command,self.sex_path], stdout=subprocess.PIPE, shell=True)
+        out, err_result = proc.communicate()
+    
+        if out=='':
+            arcFileMap = np.loadtxt(outputFileName, usecols = [0,1,3])
+            arcFileMap[:,0] -=1
+            arcFileMap[:,1] -=1
+            arcFileMap = np.insert(arcFileMap, 2, 0, axis=1)
+            self.arcFileMap = np.insert(arcFileMap, 3, arcFileMap[:,3], axis=1)
+            np.save(self.arcFile+'_map', self.arcFileMap)
+            
+            plt.imshow(np.log10(self.arcIm_b), origin ='lower', cmap = plt.cm.gray)
+            plt.scatter(arcFileMap[:,0],arcFileMap[:,1], s=0.5, c='r', edgecolors='none', alpha = 0.5)
+            plt.title(arcFileMap.shape[0]+' sample points')
+            plt.legend()
+            plt.savefig(self.arcFile[:-5], dpi=700.)
+            
+        length = 10 #this is the range of x pixels used for fitting the gaussian
+        for x,y in zip(self.arcFileMap[:,0],self.arcFileMap[:,1]):
+            xRange = np.arange(x-length/2,x+length/2+1).astype(int)
+            self.xRange = xRange
+            self.imCurve = self.arcIm_b[y,xRange] # the actual 1D section to be fitted
+            self.pSingleGaussian = [np.array(2.),np.array(x),np.array(np.max(self.imCurve))] #sigma, mu, A (std Dev, postion, peak)
+            p = self.fit_single_gaussian()
+            
+            #x,y,A,sigma,gamma,mu
+            outString = (str(x) + ', ' + 
+                        str(y) + ', ' + 
+                        str(p[0][2]) + ', ' + 
+                        str(p[0][0]) + ', ' + 
+                        str(0) + ', ' + 
+                        str(p[0][1]) + ', ' + 
+                        '\n' )
+            fileOutSpa.write(outString)            
+        
+        
+    
+    def read_spectral_psf_data(self, profile, referenceFile, camera):
         import matplotlib
         import matplotlib.cm as cm
         import matplotlib.mlab as mlab
@@ -1019,11 +1141,206 @@ class PSF():
             cameraName = 'IR Camera'
             
         
-        self.base_dir = '/Users/Carlos/Documents/HERMES/reductions/resolution_gayandhi/'
+#         self.base_dir = '/Users/Carlos/Documents/HERMES/reductions/resolution_gayandhi/'
+        dataFile = 'spectral'+profile[0].upper()+str(camera)+'.txt'
+
+        a = np.loadtxt(dataFile, skiprows=1, delimiter = ',' , usecols=[0,1,2,3,4,5])
+        
+        hdulist = pf.open(referenceFile)
+        imWidth = hdulist[0].header['NAXIS1']
+        imHeight = hdulist[0].header['NAXIS2']
+        
+#         Lambda = RVS.extract_HERMES_wavelength(referenceFile)
+
+        matplotlib.rcParams['xtick.direction'] = 'out'
+        matplotlib.rcParams['ytick.direction'] = 'out'
+        
+#         X, Y = np.meshgrid(a[:,1], a[:,0])
+#         X, Y = np.meshgrid(range(imHeight),range(imWidth))
+#         Z = a[3].reshape(X.shape[1],X.shape[0])
+#         Z = Z.transpose()
+        Z = np.zeros((imHeight,imWidth))
+        for r,c,z in zip(a[:,1].astype(int),a[:,0].astype(int), a[:,3]):
+            Z[r,c] = z
+            
+#         Z = np.diagflat(a[:,3])
+#         Z[Z<0.5] = np.average(Z)
+#         Z[Z>4] = np.average(Z)
+        
         if profile=='voigt':
-            dataFile = open('spatialV'+str(camera)+'.txt','r')
+            Z = 2 * np.sqrt(2*math.log(2)) * Z
         elif profile=='gaussian':
-            dataFile = open('spatialG'+str(camera)+'.txt','r')
+            Z = 2 * np.sqrt(2*math.log(2)) * Z
+
+        # Or you can use a colormap to specify the colors; the default
+        # colormap will be used for the contour lines
+        plt.figure()
+#         im = plt.imshow(Z, interpolation='bilinear', origin='lower',
+#                         cmap=cm.gray)#, extent=(0,400,1,400))
+#         plt.xticks(range(40), Lambda.astype(int)[::len(Lambda)/40], size='small')
+#         plt.xticks(range(0,400,100),Lambda.astype(int)[::len(Lambda)/100])
+        levels = np.arange(2.5, 7., 0.5)
+        CS = plt.contour(Z, levels,
+                         origin='lower',
+                         cmap=cm.gray, 
+                         linewidths=1)#,
+                         #extent=(0,400,1,400))
+
+        #Thicken the zero contour.
+#         zc = CS.collections[6]
+#         plt.setp(zc, linewidth=4)
+         
+        plt.clabel(CS, levels,  # levels[1::2]  to label every second level
+                   inline=0,
+                   fmt='%1.2f',
+                   fontsize=12)
+        
+        # make a colorbar for the contour lines
+#         CB = plt.colorbar(CS, shrink=0.8, extend='both')
+        
+        plt.title('Spectral FWHM - ' + cameraName)
+        plt.gray()  # Now change the colormap for the contour lines and colorbar
+#         plt.flag()
+        
+        # We can still add a colorbar for the image, too.
+#         CBI = plt.colorbar(im, orientation='vertical', shrink=1)
+        
+        # This makes the original colorbar look a bit out of place,
+        # so let's improve its position.
+        
+#         l,b,w,h = plt.gca().get_position().bounds
+#         ll,bb,ww,hh = CB.ax.get_position().bounds
+#         CB.ax.set_position([ll, b+0.1*h, ww, h*0.8])
+        plt.xlabel('Pixel')
+        plt.ylabel('Pixel')
+        plt.savefig('contour_' + str(camera) + 'G.png')
+        plt.show()
+
+        
+        
+        #X-binned  plot
+#         fibreFlux = np.zeros(40)
+#         fibreFluxStd = np.zeros(40)
+#         x = np.zeros(40)
+#         for fib in [0,99,199,299,399]:
+#             for i in range(0,37,4):
+#                 fibreFlux[i] = np.average(Z[fib,i:i+10])
+#                 fibreFluxStd[i] = Z[fib,i:i+10].std()
+#             mask = [fibreFlux!=0]
+#             plt.errorbar(Lambda[mask], fibreFlux[mask], yerr=fibreFluxStd[mask], label = 'Fibre ' + str(fib+1))
+#         plt.title('FWHM - ' + cameraName)
+#         plt.xlabel('Wavelength [Ang]')
+#         plt.ylabel('PSF [px]')
+#         plt.legend()
+#         plt.savefig('lambda_' + str(camera) + 'G.png')
+#         plt.show()
+#         
+#         #y-binned  plot
+#         fibreFlux = np.zeros(400)
+#         fibreFluxStd = np.zeros(400)
+#         x = np.zeros(400)
+#         for col in [0,100,200,300,400]:
+#             for i in range(0,359,40):
+#                 fibreFlux[i] = np.average(Z[i:i+40,col])
+#                 fibreFluxStd[i] = Z[i:i+40,col].std()
+#             mask = [fibreFlux!=0]
+#             plt.errorbar(np.array(range(len(fibreFlux)))[mask], fibreFlux[mask], yerr=fibreFluxStd[mask], label = 'column ' + str(col*10))
+#         plt.title('FWHM - '+cameraName)
+#         plt.xlabel('Fibre')
+#         plt.ylabel('PSF [px]')
+#         plt.legend()
+#         plt.savefig('fibre_' + str(camera) + 'G.png')
+#         plt.show()
+#         
+        
+        
+#         rows = 4112
+#         cols = 4146
+#         bins = 4
+#         #bin rows
+#         for i in range(bins):
+#             binLimits = (rows/bins*i,rows/bins*(i+1))
+#             mapBin = ((a[1]>binLimits[0]) & (a[1]<=binLimits[1]))
+#             b = a[0,mapBin], a[5,mapBin]
+#             c = np.bincount(b[0].astype(int), weights=b[1])
+#             d = np.bincount(b[0].astype(int))
+#             px = np.arange(len(d))
+#             px = px[d>0]
+#             c = c[d>0]
+#             d = d[d>0]
+#             c = c/d
+#             plt.plot(px,c, label= ' Range (y) = ' + str(binLimits))
+#             plt.title('Spatial PSF - y-binned - ' + method)
+#             plt.xlabel('X[Px]')
+#             plt.ylabel('Std. Dev. (px)')
+#             plt.legend()
+# #         plt.savefig('spa_' + str(cam) + '_y_' + method +'.png')
+#         plt.show()
+#     
+#         #bin cols
+#         for i in range(bins):
+#             binLimits = (cols/bins*i,cols/bins*(i+1))
+#             mapBin = ((a[0]>binLimits[0]) & (a[0]<=binLimits[1]))
+#             b = a[1,mapBin], a[5,mapBin]
+#             c = np.bincount(b[0].astype(int), weights=b[1])
+#             d = np.bincount(b[0].astype(int))
+#             px = np.arange(len(d))
+#             px = px[d>0]
+#             c = c[d>0]
+#             d = d[d>0]
+#             c = c/d
+#             plt.plot(px,c, label= ' Range (x) = ' + str(binLimits))
+#             plt.title('Spatial PSF - x-binned - ' + method)
+#             plt.xlabel('Y-Pixels')
+#             plt.ylabel('Std. Dev. (px)')
+#             plt.legend()
+#         plt.savefig('spa_' + str(cam) + '_x_' + method +'.png')
+#         plt.show()
+    
+    
+    #     grid = np.zeros((4112,4146))
+    #     a[2] = a[2]/max(a[2])*65535
+    #     pointSize = 10
+    #     for i in range(len(a[0])):
+    #         grid[int(a[1][i]-pointSize):int(a[1][i]+pointSize),int(a[0][i]-pointSize):int(a[0][i]+pointSize)] = a[2][i]
+    #     plt.imshow(grid, origin='lower')
+    #     plt.set_cmap(cm.Greys_r)                                                                                    
+    #     plt.show()
+    #     pf.writeto('a.fits', grid)
+    
+    
+        #interpolate function
+    #     f = interp2d(a[0][range(0,len(a[0]),1)],a[1][range(0,len(a[0]),1)],a[5][range(0,len(a[0]),1)])#, kind='cubic')
+    # #     grid = np.zeros((4112,4146))
+    # #     grid = f(a[0].astype('int'), a[1].astype('int'))
+    #     grid = f(range(4112),range(4146))
+    # #     grid = f(range(100),range(100))
+    #     plt.imshow(grid, origin='lower')
+    #     plt.set_cmap(cm.Greys_r)                                                                                    
+    #     plt.show()
+    #     pf.writeto('a.fits',grid, clobber= True)
+
+    def read_spatial_psf_data(self, profile, referenceFile, camera):
+        import matplotlib
+        import matplotlib.cm as cm
+        import matplotlib.mlab as mlab
+        import matplotlib.pyplot as plt
+        
+    #     from scipy.interpolate import interp1d
+    #     from scipy.interpolate import interp2d
+    #     import pyfits as pf
+        if camera==1:
+            cameraName = 'Blue Camera'
+        elif camera==2:
+            cameraName = 'Green Camera'
+        elif camera==3:
+            cameraName = 'Red Camera'
+        elif camera==4:
+            cameraName = 'IR Camera'
+            
+        
+#         self.base_dir = '/Users/Carlos/Documents/HERMES/reductions/resolution_gayandhi/'
+        dataFile = 'spatial'+profile[0].upper()+str(camera)+'.txt'
 
         a = np.loadtxt(dataFile, skiprows=1, delimiter = ',' , usecols=[0,1,2,3,4,5]).transpose()
     
@@ -1032,7 +1349,7 @@ class PSF():
         matplotlib.rcParams['xtick.direction'] = 'out'
         matplotlib.rcParams['ytick.direction'] = 'out'
         
-        X, Y = np.meshgrid(np.unique(a[1]), np.unique(a[0]))
+        X, Y = np.meshgrid(a[1], a[0])
         Z = a[3].reshape(X.shape[1],X.shape[0])
         Z = Z.transpose()
 
@@ -1050,7 +1367,7 @@ class PSF():
         im = plt.imshow(Z, interpolation='bilinear', origin='lower',
                         cmap=cm.gray, extent=(0,400,1,400))
 #         plt.xticks(range(40), Lambda.astype(int)[::len(Lambda)/40], size='small')
-        plt.xticks(range(0,400,100),Lambda.astype(int)[::len(Lambda)/100])
+#         plt.xticks(range(0,400,100),Lambda.astype(int)[::len(Lambda)/100])
         levels = np.arange(2.5, 7., 0.5)
         CS = plt.contour(Z, levels,
                          origin='lower',
@@ -1191,5 +1508,4 @@ class PSF():
     #     plt.set_cmap(cm.Greys_r)                                                                                    
     #     plt.show()
     #     pf.writeto('a.fits',grid, clobber= True)
-
     
