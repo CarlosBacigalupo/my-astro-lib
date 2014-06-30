@@ -168,7 +168,7 @@ class dr2df():
                                     print os_command
 #                                     out = subprocess.call(os_command, env = env, shell = True)
                                     os.system(os_command)
-                                    shutil.copyfile(obj[:-5]+'red.fits', '../../cam' +str(cam)+'/'+ obj[:-5]+'red.fits')
+#                                     shutil.copyfile(obj[:-5]+'red.fits', '../../cam' +str(cam)+'/'+ obj[:-5]+'red.fits')
                                     
         
 class RV():
