@@ -7,6 +7,8 @@ import os
 import shutil
 import subprocess 
 import math
+import glob
+
 # from pymodelfit.builtins import VoigtModel
 # from pymodelfit.builtins import GaussianModel
 # from pymodelfit import get_model_instance
@@ -103,8 +105,9 @@ class dr2df():
                     os_command += ' -idxfile ' + idxFile
                     os_command += ' -OUT_DIRNAME '  + j[self.flat][:-5]+'_outdir'
                     print os_command
-                    out = subprocess.call(os_command, env = env, shell = True)
-    
+#                     out = subprocess.call(os_command, env = env, shell = True)
+                    os.system(os_command)
+
                     if out==0: #arc
                         result = True 
                          
@@ -126,7 +129,8 @@ class dr2df():
                         os_command += ' -TLMAP_FILENAME ' + j[self.flat][:-5] + 'tlm.fits'
                         os_command += ' -OUT_DIRNAME ' + j[self.arc][:-5]+'_outdir'
                         print os_command
-                        out = subprocess.call(os_command, env = env, shell = True)
+#                         out = subprocess.call(os_command, env = env, shell = True)
+                        os.system(os_command)
                          
                         if out==0: #scrunch flat
                             os_command =  'drcontrol'
@@ -135,8 +139,9 @@ class dr2df():
                             os_command += ' -WAVEL_FILENAME ' + j[self.arc][:-5] + 'red.fits'
                             os_command += ' -OUT_DIRNAME ' + j[self.flat][:-5]+'_outdir'
                             print os_command
-                            out = subprocess.call(os_command, env = env, shell = True)
-                            
+#                             out = subprocess.call(os_command, env = env, shell = True)
+                            os.system(os_command)
+
                             obj_files = np.array(j[:])
                             mask = (obj_files!=obj_files[self.arc]) & (obj_files!=obj_files[self.flat])
                             obj_files = obj_files[mask]                       
@@ -161,7 +166,8 @@ class dr2df():
                                     os.system('killall drcontrol')
                                     os.system('killall drexec')
                                     print os_command
-                                    out = subprocess.call(os_command, env = env, shell = True)
+#                                     out = subprocess.call(os_command, env = env, shell = True)
+                                    os.system(os_command)
                                     shutil.copyfile(obj[:-5]+'red.fits', '../../cam' +str(cam)+'/'+ obj[:-5]+'red.fits')
                                     
         
@@ -1101,6 +1107,8 @@ class PSF():
             plt.title(str(arcFileMap.shape[0])+' sample points')
             plt.legend()
             plt.savefig(self.arcFile[:-5], dpi=700.)
+            plt.close()
+            
             
         length = 10 #this is the range of x pixels used for fitting the gaussian
         for x,y in zip(self.arcFileMap[:,0],self.arcFileMap[:,1]):
@@ -1142,79 +1150,86 @@ class PSF():
             
         
 #         self.base_dir = '/Users/Carlos/Documents/HERMES/reductions/resolution_gayandhi/'
-        dataFile = 'spectral'+profile[0].upper()+str(camera)+'.txt'
+#         dataFile = 'spectral'+profile[0].upper()+str(camera)+'.txt'
+        files = glob.glob('*.txt')
+        for dataFile in files:
+#             dataFile = '07feb10021.fitsspectralG1.txt'
+            a = np.loadtxt(dataFile, skiprows=1, delimiter = ',' , usecols=[0,1,2,3,4,5])
+            
+    #         hdulist = pf.open(referenceFile)
+    #         imWidth = hdulist[0].header['NAXIS1']
+    #         imHeight = hdulist[0].header['NAXIS2']
+    #         
+    # #         Lambda = RVS.extract_HERMES_wavelength(referenceFile)
+    # 
+    #         matplotlib.rcParams['xtick.direction'] = 'out'
+    #         matplotlib.rcParams['ytick.direction'] = 'out'
+            
+            plt.scatter(a[:,0],a[:,1], s=a[:,3]/np.max(a[:,3])*100, edgecolors='none')
+            plt.savefig(dataFile[:-19],dpi=700.)
+#             plt.show()
+            plt.close()
 
-        a = np.loadtxt(dataFile, skiprows=1, delimiter = ',' , usecols=[0,1,2,3,4,5])
-        
-        hdulist = pf.open(referenceFile)
-        imWidth = hdulist[0].header['NAXIS1']
-        imHeight = hdulist[0].header['NAXIS2']
-        
-#         Lambda = RVS.extract_HERMES_wavelength(referenceFile)
-
-        matplotlib.rcParams['xtick.direction'] = 'out'
-        matplotlib.rcParams['ytick.direction'] = 'out'
-        
 #         X, Y = np.meshgrid(a[:,1], a[:,0])
 #         X, Y = np.meshgrid(range(imHeight),range(imWidth))
 #         Z = a[3].reshape(X.shape[1],X.shape[0])
 #         Z = Z.transpose()
-        Z = np.zeros((imHeight,imWidth))
-        for r,c,z in zip(a[:,1].astype(int),a[:,0].astype(int), a[:,3]):
-            Z[r,c] = z
-            
-#         Z = np.diagflat(a[:,3])
-#         Z[Z<0.5] = np.average(Z)
-#         Z[Z>4] = np.average(Z)
-        
-        if profile=='voigt':
-            Z = 2 * np.sqrt(2*math.log(2)) * Z
-        elif profile=='gaussian':
-            Z = 2 * np.sqrt(2*math.log(2)) * Z
-
-        # Or you can use a colormap to specify the colors; the default
-        # colormap will be used for the contour lines
-        plt.figure()
-#         im = plt.imshow(Z, interpolation='bilinear', origin='lower',
-#                         cmap=cm.gray)#, extent=(0,400,1,400))
-#         plt.xticks(range(40), Lambda.astype(int)[::len(Lambda)/40], size='small')
-#         plt.xticks(range(0,400,100),Lambda.astype(int)[::len(Lambda)/100])
-        levels = np.arange(2.5, 7., 0.5)
-        CS = plt.contour(Z, levels,
-                         origin='lower',
-                         cmap=cm.gray, 
-                         linewidths=1)#,
-                         #extent=(0,400,1,400))
-
-        #Thicken the zero contour.
-#         zc = CS.collections[6]
-#         plt.setp(zc, linewidth=4)
-         
-        plt.clabel(CS, levels,  # levels[1::2]  to label every second level
-                   inline=0,
-                   fmt='%1.2f',
-                   fontsize=12)
-        
-        # make a colorbar for the contour lines
-#         CB = plt.colorbar(CS, shrink=0.8, extend='both')
-        
-        plt.title('Spectral FWHM - ' + cameraName)
-        plt.gray()  # Now change the colormap for the contour lines and colorbar
-#         plt.flag()
-        
-        # We can still add a colorbar for the image, too.
-#         CBI = plt.colorbar(im, orientation='vertical', shrink=1)
-        
-        # This makes the original colorbar look a bit out of place,
-        # so let's improve its position.
-        
-#         l,b,w,h = plt.gca().get_position().bounds
-#         ll,bb,ww,hh = CB.ax.get_position().bounds
-#         CB.ax.set_position([ll, b+0.1*h, ww, h*0.8])
-        plt.xlabel('Pixel')
-        plt.ylabel('Pixel')
-        plt.savefig('contour_' + str(camera) + 'G.png')
-        plt.show()
+#         Z = np.zeros((imHeight,imWidth))
+#         for r,c,z in zip(a[:,1].astype(int),a[:,0].astype(int), a[:,3]):
+#             Z[r,c] = z
+#             
+# #         Z = np.diagflat(a[:,3])
+# #         Z[Z<0.5] = np.average(Z)
+# #         Z[Z>4] = np.average(Z)
+#         
+#         if profile=='voigt':
+#             Z = 2 * np.sqrt(2*math.log(2)) * Z
+#         elif profile=='gaussian':
+#             Z = 2 * np.sqrt(2*math.log(2)) * Z
+# 
+#         # Or you can use a colormap to specify the colors; the default
+#         # colormap will be used for the contour lines
+#         plt.figure()
+# #         im = plt.imshow(Z, interpolation='bilinear', origin='lower',
+# #                         cmap=cm.gray)#, extent=(0,400,1,400))
+# #         plt.xticks(range(40), Lambda.astype(int)[::len(Lambda)/40], size='small')
+# #         plt.xticks(range(0,400,100),Lambda.astype(int)[::len(Lambda)/100])
+#         levels = np.arange(2.5, 7., 0.5)
+#         CS = plt.contour(Z, levels,
+#                          origin='lower',
+#                          cmap=cm.gray, 
+#                          linewidths=1)#,
+#                          #extent=(0,400,1,400))
+# 
+#         #Thicken the zero contour.
+# #         zc = CS.collections[6]
+# #         plt.setp(zc, linewidth=4)
+#          
+#         plt.clabel(CS, levels,  # levels[1::2]  to label every second level
+#                    inline=0,
+#                    fmt='%1.2f',
+#                    fontsize=12)
+#         
+#         # make a colorbar for the contour lines
+# #         CB = plt.colorbar(CS, shrink=0.8, extend='both')
+#         
+#         plt.title('Spectral FWHM - ' + cameraName)
+#         plt.gray()  # Now change the colormap for the contour lines and colorbar
+# #         plt.flag()
+#         
+#         # We can still add a colorbar for the image, too.
+# #         CBI = plt.colorbar(im, orientation='vertical', shrink=1)
+#         
+#         # This makes the original colorbar look a bit out of place,
+#         # so let's improve its position.
+#         
+# #         l,b,w,h = plt.gca().get_position().bounds
+# #         ll,bb,ww,hh = CB.ax.get_position().bounds
+# #         CB.ax.set_position([ll, b+0.1*h, ww, h*0.8])
+#         plt.xlabel('Pixel')
+#         plt.ylabel('Pixel')
+#         plt.savefig('contour_' + str(camera) + 'G.png')
+#         plt.show()
 
         
         
