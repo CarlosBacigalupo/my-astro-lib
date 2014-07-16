@@ -25,11 +25,11 @@ class star():
     isochrone_logLumin = []
     isochrone_logTemp = []
     isochrone_fileName = 'iso_Z0_02_t4e9.dat'
-    base_dir = '/Users/Carlos/Documents/simulations/M67/'
     solar_delta_nu = 0 #[microHz]
     solar_temp = 0 #[Kelvin]
     solar_A_max = 0  #[m/s]
     solar_nu_max = 0 #[microHz]
+    output = True
     
     def __init__(self):
         self.load_solar_data()
@@ -55,17 +55,19 @@ class star():
             return
         
         try:
-            a = np.loadtxt(self.base_dir + self.isochrone_fileName ,skiprows=13)
+            a = np.loadtxt(self.isochrone_fileName ,skiprows=8)
         except:
-            print 'Could not open file ' + str(self.base_dir + self.isochrone_fileName)
+            print 'Could not open file ' + str(self.isochrone_fileName)
             print sys.exc_info()[0]
             return
         
-        self.isochrone_mass = a[:,2]
-        self.isochrone_logTemp=a[:,5]
+        self.isochrone_mass = a[:,1]
+        self.isochrone_logTemp=a[:,2]
         self.isochrone_logLumin=a[:,4]
+        self.isochrone_BMag = a[:,6]
+        self.isochrone_VMag = a[:,7]
         
-        print 'Isochrone ' + self.isochrone_fileName + ' loaded.'
+        if self.output==True:print 'Isochrone ' + self.isochrone_fileName + ' loaded.'
         
         
     def populate_stellar_parameters(self):
@@ -92,7 +94,7 @@ class star():
         self.isoLogLumin = self.isochrone_logLumin[closest_point_index]
         self.isoTemp = 10**self.isoLogTemp
         self.isoLumin = 10**self.isoLogLumin
-        print 'Mass, Luminosity and Temperature read from isochrone.'
+        if self.output==True:print 'Mass, Luminosity and Temperature read from isochrone.'
         
         self.calculate_A_max()
         self.calculate_delta_nu()
@@ -106,7 +108,7 @@ class star():
         
         if self.isoLumin < self.luminLimit:
             self.not_a_giant_flag = True
-            print 'Not a giant flag set'
+            if self.output==True:print 'Not a giant flag set'
 
 
     def calculate_delta_nu(self):
@@ -122,7 +124,7 @@ class star():
         
         delta_nu = (((self.isoMass ** 0.5) * ((self.isoTemp / self.solar_temp) ** 3.)) / (self.isoLumin ** 0.75)) * self.solar_delta_nu        
         self.delta_nu = delta_nu
-        print 'Calculated delta_nu.'
+        if self.output==True:print 'Calculated delta_nu.'
         
         
     def calculate_A_max(self):
@@ -137,7 +139,7 @@ class star():
         
         A_max = ((self.isoLumin ** 0.84) / (self.isoMass ** 1.32)) * self.solar_A_max
         self.A_max = A_max
-        print 'Calculated A_max.'
+        if self.output==True:print 'Calculated A_max in m/s'
         
         
     def calculate_nu_max(self):
@@ -153,7 +155,7 @@ class star():
         
         nu_max = ((self.isoMass * ((self.isoTemp / self.solar_temp) ** 3.5)) / self.isoLumin) * (self.solar_nu_max)
         self.nu_max = nu_max
-        print 'Calculated nu_max.'
+        if self.output==True:print 'Calculated nu_max.'
    
     def calculate_nu_amp(self, nu):
         """
@@ -217,7 +219,7 @@ class star():
 
         self.modeFreq = nulist
         self.modeAmp = amplist
-        print 'Frequency modes calculated. See <class_name>.modeFreq and  <class_name>.modeAmp'
+        if self.output==True:print 'Frequency modes calculated. See <class_name>.modeFreq and  <class_name>.modeAmp'
 
    
    
@@ -225,7 +227,6 @@ class star():
 class ObsSimulation():
     
     outfile = 'out.csv'
-    base_dir = '/Users/Carlos/Documents/simulations/M67/'
     obs_samplingRate = 900  #How long will it take to produce a data point (in secs)
     obs_days = 4                     #Number of days that the observing run will last
     obs_error = 10                    #The amount of noise you wish to add to your timeseries, in meters per second
@@ -466,10 +467,10 @@ class ObsSimulation():
             self.save_results()    
    
    
-a = ObsSimulation()
-a.start_simulation()
-a.plot()
-a.write_output()
+# a = ObsSimulation()
+# a.start_simulation()
+# a.plot()
+# a.write_output()
 
 
 

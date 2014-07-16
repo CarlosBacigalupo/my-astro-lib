@@ -104,6 +104,8 @@ class dr2df():
                     os_command += ' reduce_fflat ' + j[self.flat]
                     os_command += ' -idxfile ' + idxFile
                     os_command += ' -OUT_DIRNAME '  + j[self.flat][:-5]+'_outdir'
+                    os.system('killall drcontrol')
+                    os.system('killall drexec')
                     print os_command
 #                     out = subprocess.call(os_command, env = env, shell = True)
                     os.system(os_command)
@@ -128,6 +130,8 @@ class dr2df():
                         os_command += ' -idxfile ' + idxFile
                         os_command += ' -TLMAP_FILENAME ' + j[self.flat][:-5] + 'tlm.fits'
                         os_command += ' -OUT_DIRNAME ' + j[self.arc][:-5]+'_outdir'
+                        os.system('killall drcontrol')
+                        os.system('killall drexec')
                         print os_command
 #                         out = subprocess.call(os_command, env = env, shell = True)
                         os.system(os_command)
@@ -138,6 +142,8 @@ class dr2df():
                             os_command += ' -idxfile ' + idxFile
                             os_command += ' -WAVEL_FILENAME ' + j[self.arc][:-5] + 'red.fits'
                             os_command += ' -OUT_DIRNAME ' + j[self.flat][:-5]+'_outdir'
+                            os.system('killall drcontrol')
+                            os.system('killall drexec')
                             print os_command
 #                             out = subprocess.call(os_command, env = env, shell = True)
                             os.system(os_command)
